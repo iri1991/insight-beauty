@@ -1,0 +1,22 @@
+{
+  "name": "beautyapp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "extract-source": "node scripts/build-source-library.mjs",
+    "validate": "node scripts/validate-domain.mjs",
+    "push:keys": "node scripts/generate-vapid-keys.mjs",
+    "seed": "node scripts/seed-database.mjs",
+    "seed:reset": "node scripts/seed-database.mjs --reset"
+  },
+  "dependencies": {
+    "mongoose": "^8.12.1",
+    "next": "^15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "web-push": "^3.6.7"
+  }
+}
