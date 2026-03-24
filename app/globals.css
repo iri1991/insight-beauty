@@ -1319,6 +1319,72 @@ select {
   flex: 1;
 }
 
+/* ─── Intake autentificat ──────────────────────────────────────── */
+
+.banner-context {
+  border-left-color: var(--mint);
+}
+
+.banner-profile {
+  border-left-color: #7da495;
+}
+
+.banner-warn {
+  border-left-color: #c76447;
+  background: #fdf6f2;
+}
+
+.banner-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.auth-identity-card {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.identity-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.identity-row .field-label {
+  width: 80px;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+}
+
+.identity-row strong {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.identity-row .field-input {
+  flex: 1;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.88rem;
+}
+
+.questionnaire-title-row {
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.questionnaire-title-row h2 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+}
+
 /* ─── Professional Intake Multi-step ──────────────────────────── */
 
 .professional-intake-shell {

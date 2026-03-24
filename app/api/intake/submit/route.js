@@ -86,23 +86,43 @@ export async function POST(request) {
     const { ClientProfile } = getModels();
     const existingProfile = await ClientProfile.findOne({ email: user.email.toLowerCase() }).lean().exec();
 
-    if (!existingProfile) {
-      return NextResponse.json({ error: "Nu ai o fișă înregistrată. Contactează profesionistul tău." }, { status: 404 });
-    }
+    let salon, professional, clientData;
 
-    const salon = await getSalonById(existingProfile.salonId);
-    const professional = await getProfessionalById(existingProfile.professionalId);
+    if (existingProfile) {
+      salon = await getSalonById(existingProfile.salonId);
+      professional = await getProfessionalById(existingProfile.professionalId);
+      clientData = {
+        firstName: existingProfile.firstName,
+        lastName: existingProfile.lastName,
+        email: existingProfile.email,
+        phone: payload.phone?.trim() || existingProfile.phone || ""
+      };
+    } else {
+      // First-time client: get salon/professional from payload (from share link context)
+      const { salonSlug, professionalId: profId } = payload;
+      if (!salonSlug || !profId) {
+        return NextResponse.json(
+          { error: "Prima evaluare necesită linkul primit de la profesionistul tău (cu contextul salonului)." },
+          { status: 422 }
+        );
+      }
+      salon = await getSalonBySlug(salonSlug);
+      professional = await getProfessionalById(profId);
+      if (!salon || !professional || String(professional.salonId) !== String(salon._id)) {
+        return NextResponse.json({ error: "Contextul salon/profesionist din link nu este valid." }, { status: 422 });
+      }
+      const nameParts = (user.displayName || user.email).split(" ");
+      clientData = {
+        firstName: nameParts[0] || user.email,
+        lastName: nameParts.slice(1).join(" ") || "",
+        email: user.email.toLowerCase(),
+        phone: payload.phone?.trim() || ""
+      };
+    }
 
     if (!salon || !professional) {
       return NextResponse.json({ error: "Contextul salonului sau profesionistului nu este valid." }, { status: 422 });
     }
-
-    const clientData = {
-      firstName: existingProfile.firstName,
-      lastName: existingProfile.lastName,
-      email: existingProfile.email,
-      phone: existingProfile.phone || ""
-    };
 
     const result = await persistIntakeResult({
       questionnaire, answers: answers || {},

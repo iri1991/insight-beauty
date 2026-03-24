@@ -5,7 +5,7 @@ function buildNavigation(currentUser) {
   const baseNavigation = [{ href: "/", label: "Vision" }];
 
   if (!currentUser) {
-    return [...baseNavigation, { href: "/client/intake", label: "Evaluare" }, { href: "/login", label: "Login" }];
+    return [...baseNavigation, { href: "/login", label: "Login" }];
   }
 
   if (currentUser.role === "admin") {
