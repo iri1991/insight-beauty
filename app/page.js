@@ -1,106 +1,173 @@
 import Link from "next/link";
-import { PwaFoundation } from "../components/pwa-foundation";
-import { isDatabaseConfigured } from "../lib/auth";
-import { listQuestionnaireCatalog } from "../lib/questionnaire-engine";
-import { getAdminSnapshot } from "../lib/repositories";
-import { getSourceStats } from "../lib/source-library";
 
-const roleColumns = [
+const heroSignals = ["guided intake", "clinical skin journeys", "tenant privacy by design"];
+
+const pillars = [
   {
-    title: "Admini",
-    copy: "Controleaza configuratia platformei, formularele, interpretarile, impersonarea per salon si observabilitatea globala."
+    title: "Beautifully calm",
+    copy: "Experienta este aerisita, clara si tactila. Totul se simte premium, fara zgomot operational sau ecrane incarcate."
   },
   {
-    title: "Saloane",
-    copy: "Functioneaza ca tenant separat, cu acces strict la propriii profesionisti, clienti, raspunsuri si planuri de tratament."
+    title: "Clinically precise",
+    copy: "Chestionarele, interpretarile si dosarul evolutiv lucreaza impreuna pentru o relatie mai inteligenta intre beauty si skin health."
   },
   {
-    title: "Profesionisti",
-    copy: "Distribuie chestionare, interpreteaza raspunsurile, construiesc planuri si urmaresc evolutia in fisa clientului."
-  },
-  {
-    title: "Clienti",
-    copy: "Completeaza intake-ul, primesc confirmari pe email, interpretari si propuneri de programare pentru debriefing."
+    title: "Built for continuity",
+    copy: "Primul intake nu se pierde intr-un formular uitat. Din el incepe un dosar viu, cu progres, tratamente si follow-up."
   }
 ];
 
-const journey = [
-  "Adminul construieste biblioteca de formulare, seturile de raspuns si regulile de interpretare din documentele sursa.",
-  "Salonul isi configureaza echipa, iar profesionistii distribuie linkurile de chestionar catre clienti.",
-  "Clientul completeaza datele personale si raspunsurile, iar sistemul evalueaza rezultatul pe server.",
-  "Se genereaza fisa personala, istoricul longitudinal, recomandarea de tratament si propunerea de debriefing."
+const experienceMoments = [
+  {
+    label: "01",
+    title: "First contact becomes diagnosis-ready",
+    copy: "Clientul intra intr-un intake elegant, complet, natural de parcurs si suficient de riguros pentru un debriefing real."
+  },
+  {
+    label: "02",
+    title: "Results become a care conversation",
+    copy: "Raspunsurile nu raman brute. Ele se transforma in interpretari, context, prioritati si propuneri de urmator pas."
+  },
+  {
+    label: "03",
+    title: "Every client becomes longitudinal",
+    copy: "Dupa prima evaluare, Insight Beauty deschide un traseu: obiective, plan activ, sedinte, observatii si evolutie in timp."
+  }
 ];
 
-export default async function HomePage() {
-  const questionnaireCatalog = listQuestionnaireCatalog();
-  const sourceStats = getSourceStats();
-  const adminSnapshot = await getAdminSnapshot();
+const rolePerspective = [
+  {
+    title: "Admini",
+    copy: "Orchestreaza biblioteca de formulare, logica de interpretare, tenanturile si observabilitatea platformei."
+  },
+  {
+    title: "Saloane",
+    copy: "Isi pastreaza datele clientilor intr-un spatiu izolat, elegant si sigur, gandit pentru confidentialitate reala."
+  },
+  {
+    title: "Profesionisti",
+    copy: "Distribuie intake-uri, citesc contextul clientului mai repede si opereaza tot traseul terapeutic din acelasi loc."
+  },
+  {
+    title: "Clienti",
+    copy: "Primesc o experienta coerenta, premium si clara, de la primul formular pana la confirmare si debriefing."
+  }
+];
 
+const productCuts = [
+  "Intake public cu interpretare automata",
+  "Dosar personal evolutiv dupa primul raspuns",
+  "Plan de tratament si homecare in acelasi flux",
+  "Share elegant pentru profesionisti si follow-up rapid",
+  "PWA instalabil, pregatit pentru push si mobile extension"
+];
+
+export default function HomePage() {
   return (
-    <div className="stack page-stack">
-      <section className="hero">
-        <div className="hero-grid">
-          <div className="hero-copy">
-            <span className="eyebrow">Beauty intelligence platform</span>
-            <h1>O aplicatie fullstack JS + Mongo gandita pentru beauty, health si confidentialitate reala per salon.</h1>
+    <div className="stack page-stack landing-shell">
+      <section className="hero hero-immersive">
+        <div className="hero-grid landing-hero-grid">
+          <div className="hero-copy landing-copy">
+            <span className="eyebrow">Beauty intelligence for 2026 care spaces</span>
+            <h1>Insight Beauty aduce eleganta editoriala si rigoare clinica in acelasi sistem.</h1>
             <p className="lead-copy">
-              MVP-ul de aici pune in acelasi sistem: intake clinic, motor configurabil de formulare si scoruri, profil
-              longitudinal client, spatiu de lucru pentru salon si consola de admin.
+              O platforma creata pentru saloane premium, skin studios si concepte moderne de beauty-health care vor mai
+              mult decat formulare. Vor context, continuitate, confidentialitate si o experienta care arata la fel de
+              bine precum functioneaza.
             </p>
-            {!isDatabaseConfigured() ? (
-              <p className="inline-error">Mongo nu este configurat inca. Runtime-ul real necesita `MONGODB_URI` si seed initial.</p>
-            ) : null}
-            <div className="button-row">
+
+            <div className="capsule-strip">
+              {heroSignals.map((signal) => (
+                <span key={signal} className="capsule-pill">
+                  {signal}
+                </span>
+              ))}
+            </div>
+
+            <div className="button-row landing-actions">
               <Link className="button primary" href="/client/intake">
-                Testeaza fluxul client
+                Descopera experienta clientului
               </Link>
-              <Link className="button secondary" href="/admin">
-                Vezi consola admin
+              <Link className="button secondary" href="/login">
+                Intra in platforma
               </Link>
             </div>
           </div>
 
-          <div className="hero-card spotlight">
-            <div className="metric-grid">
-              <article className="metric-card">
-                <span>Tenanturi active</span>
-                <strong>{adminSnapshot.salons}</strong>
-              </article>
-              <article className="metric-card">
-                <span>Profesionisti</span>
-                <strong>{adminSnapshot.professionals}</strong>
-              </article>
-              <article className="metric-card">
-                <span>Clienti activi</span>
-                <strong>{adminSnapshot.activeClients}</strong>
-              </article>
-              <article className="metric-card">
-                <span>Formulare active</span>
-                <strong>{adminSnapshot.activeForms}</strong>
-              </article>
-            </div>
-            <div className="insight-panel">
-              <span className="eyebrow">Source traceability</span>
-              <h3>{sourceStats.total || 0} documente sursa indexate</h3>
+          <div className="hero-stage">
+            <article className="hero-stage-card hero-stage-main">
+              <span className="eyebrow">Signature atmosphere</span>
+              <h2>From first glow to living dossier.</h2>
               <p>
-                Documentele din `source` sunt tratate ca strat editorial: intrebari, interpretari, tipologii si
-                consimtamant.
+                Insight Beauty este gandit ca o experienta fluida: un intake sofisticat, o interpretare clara, apoi o
+                relatie operationala continua intre client, profesionist si salon.
               </p>
-            </div>
+            </article>
+
+            <article className="hero-stage-card hero-stage-note">
+              <span className="stage-kicker">Crafted for premium skin care</span>
+              <p>
+                Nu este un CRM generic cosmetizat. Este un sistem construit din perspectiva unei experiente beauty-health
+                contemporane, calme si foarte precise.
+              </p>
+            </article>
+
+            <article className="hero-stage-card hero-stage-mini">
+              <span className="stage-label">Mobile native energy</span>
+              <strong>PWA-ready, push-ready, future app-ready.</strong>
+            </article>
           </div>
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Operating model</span>
-            <h2>Patru entitati, un singur nucleu de date</h2>
+      <section className="section-block editorial-band">
+        <div className="editorial-grid">
+          <div className="editorial-intro">
+            <span className="eyebrow">Design philosophy</span>
+            <h2>Un produs care nu forteaza beauty-ul sa semene cu software de backoffice.</h2>
+          </div>
+
+          <div className="card-grid three-up">
+            {pillars.map((pillar) => (
+              <article key={pillar.title} className="detail-card editorial-card">
+                <h3>{pillar.title}</h3>
+                <p>{pillar.copy}</p>
+              </article>
+            ))}
           </div>
         </div>
+      </section>
+
+      <section className="section-block story-band">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Experience flow</span>
+            <h2>Un parcurs coerent, gandit pentru conversatie, decizie si continuitate.</h2>
+          </div>
+        </div>
+
+        <div className="card-grid three-up">
+          {experienceMoments.map((moment) => (
+            <article key={moment.label} className="detail-card story-card">
+              <span className="story-index">{moment.label}</span>
+              <h3>{moment.title}</h3>
+              <p>{moment.copy}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-block perspective-band">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Made for every role</span>
+            <h2>Fiecare actor vede exact ce are nevoie, fara sa piarda finetea experientei.</h2>
+          </div>
+        </div>
+
         <div className="card-grid four-up">
-          {roleColumns.map((role) => (
-            <article key={role.title} className="detail-card">
+          {rolePerspective.map((role) => (
+            <article key={role.title} className="detail-card perspective-card">
               <h3>{role.title}</h3>
               <p>{role.copy}</p>
             </article>
@@ -108,44 +175,47 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Client journey</span>
-            <h2>Fluxul cap-coada</h2>
+      <section className="section-block feature-band">
+        <div className="feature-band-grid">
+          <div className="feature-band-copy">
+            <span className="eyebrow">What lives inside</span>
+            <h2>Insight Beauty uneste intake, interpretare, tratament si follow-up intr-un singur gest digital.</h2>
+            <p className="lead-copy">
+              Totul este construit pentru spatii de beauty care gandesc pe termen lung: nu doar sedinte, ci relatie,
+              memorie si o estetica operationala de nivel inalt.
+            </p>
           </div>
-        </div>
-        <div className="timeline">
-          {journey.map((step) => (
-            <article key={step} className="timeline-card">
-              <p>{step}</p>
-            </article>
-          ))}
+
+          <div className="feature-stack">
+            {productCuts.map((item) => (
+              <article key={item} className="feature-line">
+                <span className="feature-dot" />
+                <p>{item}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Form engine</span>
-            <h2>Ce este activ in primul increment</h2>
-          </div>
+      <section className="section-block final-cta">
+        <div className="final-cta-copy">
+          <span className="eyebrow">Ready to feel different</span>
+          <h2>O platforma care arata, se misca si gandeste ca un brand beauty premium.</h2>
+          <p className="lead-copy">
+            Insight Beauty este despre claritate, rafinament si decizii mai bune, fara compromis intre estetica si
+            structura operationala.
+          </p>
         </div>
-        <div className="card-grid three-up">
-          {questionnaireCatalog.map((questionnaire) => (
-            <article key={questionnaire.slug} className="detail-card">
-              <div className="card-row">
-                <h3>{questionnaire.title}</h3>
-                <span className={`tag ${questionnaire.status === "active" ? "tag-soft" : ""}`}>{questionnaire.status}</span>
-              </div>
-              <p>{questionnaire.description}</p>
-              <p className="helper-copy">Sursa: {questionnaire.sourceRefs.join(", ")}</p>
-            </article>
-          ))}
+
+        <div className="button-row">
+          <Link className="button primary" href="/client/intake">
+            Vezi fluxul de intake
+          </Link>
+          <Link className="button secondary" href="/login">
+            Acceseaza workspace-ul
+          </Link>
         </div>
       </section>
-
-      <PwaFoundation />
     </div>
   );
 }
