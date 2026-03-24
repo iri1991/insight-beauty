@@ -1,17 +1,20 @@
 import { IntakeWorkbench } from "../../../components/intake-workbench";
 import { isDatabaseConfigured } from "../../../lib/auth";
-import { listPublicQuestionnaires } from "../../../lib/questionnaire-engine";
+import { listPublicQuestionnairesAsync } from "../../../lib/questionnaire-engine";
 import { getProfessionalById, getSalonBySlug, listAllProfessionals, listSalons } from "../../../lib/repositories";
 
 export default async function ClientIntakePage({ searchParams }) {
-  const questionnaires = listPublicQuestionnaires();
-  const salons = await listSalons();
-  const professionals = await listAllProfessionals();
-  const requestedSalon = searchParams?.salon ? await getSalonBySlug(searchParams.salon) : null;
-  const requestedProfessional = searchParams?.professional ? await getProfessionalById(searchParams.professional) : null;
-  const questionnaireExists = questionnaires.some((questionnaire) => questionnaire.slug === searchParams?.questionnaire);
+  const params = await searchParams;
+  const [questionnaires, salons, professionals] = await Promise.all([
+    listPublicQuestionnairesAsync(),
+    listSalons(),
+    listAllProfessionals()
+  ]);
+  const requestedSalon = params?.salon ? await getSalonBySlug(params.salon) : null;
+  const requestedProfessional = params?.professional ? await getProfessionalById(params.professional) : null;
+  const questionnaireExists = questionnaires.some((questionnaire) => questionnaire.slug === params?.questionnaire);
   const shareMatchesProfessional =
-    !searchParams?.share || requestedProfessional?.shareCode === searchParams.share;
+    !params?.share || requestedProfessional?.shareCode === params.share;
   const professionalBelongsToSalon = requestedSalon && requestedProfessional && requestedProfessional.salonId === requestedSalon._id;
 
   const initialState =
@@ -19,7 +22,7 @@ export default async function ClientIntakePage({ searchParams }) {
       ? {
           salonSlug: requestedSalon.slug,
           professionalId: requestedProfessional._id,
-          questionnaireSlug: searchParams.questionnaire
+          questionnaireSlug: params.questionnaire
         }
       : null;
 

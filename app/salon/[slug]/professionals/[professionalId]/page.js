@@ -7,6 +7,8 @@ import { getProfessionalShareBundles } from "../../../../../lib/repositories";
 import { getTipologyCatalog } from "../../../../../lib/source-library";
 
 export default async function ProfessionalWorkspacePage({ params }) {
+  const resolvedParams = await params;
+
   if (!isDatabaseConfigured()) {
     return <AccessDenied title="Mongo neconfigurat" body="Configureaza baza de date pentru a folosi workspace-ul profesionistului." />;
   }
@@ -15,8 +17,8 @@ export default async function ProfessionalWorkspacePage({ params }) {
     "../../../../../lib/repositories"
   );
 
-  const salon = await getSalonBySlug(params.slug);
-  const professional = await getProfessionalById(params.professionalId);
+  const salon = await getSalonBySlug(resolvedParams.slug);
+  const professional = await getProfessionalById(resolvedParams.professionalId);
 
   if (!salon || !professional || professional.salonId !== salon._id) {
     notFound();
@@ -45,7 +47,12 @@ export default async function ProfessionalWorkspacePage({ params }) {
             <span className="eyebrow">Professional workspace</span>
             <h1>{professional.displayName || [professional.firstName, professional.lastName].filter(Boolean).join(" ")}</h1>
           </div>
-          <span className="tag tag-soft">{professional.specialty}</span>
+          <div className="button-row">
+            <a className="button primary" href={`/salon/${salon.slug}/professionals/${professional._id}/intake`}>
+              + Evaluare nouă
+            </a>
+            <span className="tag tag-soft">{professional.specialty}</span>
+          </div>
         </div>
 
         <div className="metric-grid">

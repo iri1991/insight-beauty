@@ -11,11 +11,13 @@ import {
 } from "../../../lib/repositories";
 
 export default async function SalonPage({ params, searchParams }) {
+  const [resolvedParams, resolvedSearch] = await Promise.all([params, searchParams]);
+
   if (!isDatabaseConfigured()) {
     return <AccessDenied title="Mongo neconfigurat" body="Configureaza baza de date pentru a folosi workspace-ul salonului." />;
   }
 
-  const salon = await getSalonBySlug(params.slug);
+  const salon = await getSalonBySlug(resolvedParams.slug);
 
   if (!salon) {
     notFound();
@@ -36,7 +38,7 @@ export default async function SalonPage({ params, searchParams }) {
       shareBundles: await getProfessionalShareBundles(salon, professional)
     }))
   );
-  const isAdminImpersonating = searchParams?.asAdmin === "1";
+  const isAdminImpersonating = resolvedSearch?.asAdmin === "1";
 
   return (
     <div className="stack page-stack">

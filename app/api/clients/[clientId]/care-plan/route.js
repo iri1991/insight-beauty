@@ -7,6 +7,8 @@ function sanitizeStringList(value) {
 }
 
 export async function POST(request, { params }) {
+  const { clientId } = await params;
+
   if (!isDatabaseConfigured()) {
     return NextResponse.json({ error: "MongoDB nu este configurat." }, { status: 503 });
   }
@@ -17,7 +19,7 @@ export async function POST(request, { params }) {
     return NextResponse.json({ error: "Sesiunea nu este valida." }, { status: 401 });
   }
 
-  const client = await getClientById(params.clientId);
+  const client = await getClientById(clientId);
 
   if (!client) {
     return NextResponse.json({ error: "Dosarul clientului nu a fost gasit." }, { status: 404 });
@@ -38,7 +40,7 @@ export async function POST(request, { params }) {
     }
   ];
 
-  const updatedClient = await updateClientCarePlan(params.clientId, {
+  const updatedClient = await updateClientCarePlan(clientId, {
     treatmentPlanSummary: String(payload.treatmentPlanSummary || "").trim(),
     treatmentProgram: {
       status: String(payload.treatmentProgram?.status || "draft"),

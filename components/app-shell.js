@@ -9,7 +9,12 @@ function buildNavigation(currentUser) {
   }
 
   if (currentUser.role === "admin") {
-    return [...baseNavigation, { href: "/client/intake", label: "Evaluare" }, { href: "/admin", label: "Admin Console" }];
+    return [
+      ...baseNavigation,
+      { href: "/client/intake", label: "Evaluare" },
+      { href: "/admin", label: "Admin" },
+      { href: "/admin/questionnaires", label: "Formulare" }
+    ];
   }
 
   if (currentUser.role === "client") {

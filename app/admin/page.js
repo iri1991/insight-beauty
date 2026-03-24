@@ -71,8 +71,11 @@ export default async function AdminPage() {
         <div className="section-heading">
           <div>
             <span className="eyebrow">Questionnaire registry</span>
-            <h2>Starea codificarii</h2>
+            <h2>Formulare și chestionare</h2>
           </div>
+          <Link className="button primary" href="/admin/questionnaires">
+            Gestionează formulare →
+          </Link>
         </div>
         <div className="card-grid three-up">
           {questionnaireCatalog.map((questionnaire) => (
@@ -82,16 +85,17 @@ export default async function AdminPage() {
                 <span className="tag">{questionnaire.status}</span>
               </div>
               <p>{questionnaire.description}</p>
-              <div className="detail-list">
-                <div className="metric-row">
-                  <span>Audience</span>
-                  <strong>{questionnaire.audience}</strong>
-                </div>
-                <div className="metric-row">
-                  <span>Coverage</span>
-                  <strong>{questionnaire.sourceCoverage}</strong>
-                </div>
+              <div className="metric-row">
+                <span>Audience</span>
+                <strong>{questionnaire.audience}</strong>
               </div>
+              <div className="metric-row">
+                <span>Coverage</span>
+                <strong>{questionnaire.sourceCoverage}</strong>
+              </div>
+              <Link className="text-link" href={`/admin/questionnaires/${questionnaire.slug}`}>
+                Editează →
+              </Link>
             </article>
           ))}
         </div>

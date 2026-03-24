@@ -6,12 +6,14 @@ import { getClientById, getProfessionalById, getSalonBySlug } from "../../../../
 import { getTipologyByCode } from "../../../../../lib/source-library";
 
 export default async function ClientDossierPage({ params }) {
+  const resolvedParams = await params;
+
   if (!isDatabaseConfigured()) {
     return <AccessDenied title="Mongo neconfigurat" body="Configureaza baza de date pentru a accesa dosarele clientilor." />;
   }
 
-  const salon = await getSalonBySlug(params.slug);
-  const client = await getClientById(params.clientId);
+  const salon = await getSalonBySlug(resolvedParams.slug);
+  const client = await getClientById(resolvedParams.clientId);
 
   if (!salon || !client || client.salonId !== salon._id) {
     notFound();

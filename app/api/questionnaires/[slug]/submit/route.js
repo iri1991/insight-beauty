@@ -6,8 +6,8 @@ import { getModels } from "../../../../../lib/mongoose-models";
 import {
   buildEmailPreview,
   createClientDossierPreview,
-  evaluateQuestionnaire,
-  getQuestionnaireBySlug
+  evaluateDefinition,
+  getQuestionnaireBySlugAsync
 } from "../../../../../lib/questionnaire-engine";
 import { getProfessionalById, getSalonBySlug } from "../../../../../lib/repositories";
 
@@ -38,6 +38,8 @@ function buildBaumannProfile(evaluation, currentProfile) {
 }
 
 export async function POST(request, { params }) {
+  const { slug } = await params;
+
   if (!isDatabaseConfigured()) {
     return NextResponse.json(
       { error: "MongoDB nu este configurat. Configureaza baza de date pentru intake si persistenta reala." },
@@ -45,7 +47,7 @@ export async function POST(request, { params }) {
     );
   }
 
-  const questionnaire = getQuestionnaireBySlug(params.slug);
+  const questionnaire = await getQuestionnaireBySlugAsync(slug);
 
   if (!questionnaire) {
     return NextResponse.json({ error: "Questionnaire not found." }, { status: 404 });
@@ -53,7 +55,7 @@ export async function POST(request, { params }) {
 
   const payload = await request.json();
   const clientPayload = payload.client || {};
-  const evaluation = evaluateQuestionnaire(params.slug, payload);
+  const evaluation = evaluateDefinition(questionnaire, payload);
 
   if (!evaluation.ok) {
     return NextResponse.json(
