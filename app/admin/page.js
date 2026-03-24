@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { AccessDenied } from "../../components/access-denied";
+import { AdminCreateSalonForm } from "../../components/admin-create-salon-form";
+import { AdminCreateUserForm } from "../../components/admin-create-user-form";
 import { canAccessAdmin, isDatabaseConfigured, requireUser } from "../../lib/auth";
 import { listQuestionnaireCatalog } from "../../lib/questionnaire-engine";
 import { getAdminSnapshot, listClientsForSalon, listProfessionalsForSalon, listSalons } from "../../lib/repositories";
@@ -99,14 +101,18 @@ export default async function AdminPage() {
         <div className="section-heading">
           <div>
             <span className="eyebrow">Tenant boundaries</span>
-            <h2>Acces si impersonare</h2>
+            <h2>Saloane gestionate</h2>
           </div>
+          <AdminCreateSalonForm />
         </div>
         <div className="card-grid three-up">
           {salonCards.map((salon) => (
             <article key={salon._id} className="detail-card">
-              <h3>{salon.name}</h3>
-              <p>{salon.city}</p>
+              <div className="card-row">
+                <h3>{salon.name}</h3>
+                <span className="tag tag-soft">{salon.theme}</span>
+              </div>
+              <p className="helper-copy">{salon.city}</p>
               <div className="metric-row">
                 <span>Profesionisti</span>
                 <strong>{salon.professionals.length}</strong>
@@ -116,13 +122,62 @@ export default async function AdminPage() {
                 <strong>{salon.clients.length}</strong>
               </div>
               <p className="helper-copy">
-                Datele sunt izolate la nivel de salon; doar adminii pot inspecta alt tenant prin impersonare controlata.
+                Date izolate per tenant. Accesul admin este extins prin impersonare controlată.
               </p>
-              <Link className="text-link" href={`/salon/${salon.slug}`}>
-                Deschide tenantul
+              <Link className="text-link" href={`/salon/${salon.slug}?asAdmin=1`}>
+                Deschide ca admin
               </Link>
             </article>
           ))}
+          {salonCards.length === 0 ? (
+            <article className="detail-card empty-card">
+              <p className="helper-copy">Niciun salon creat încă. Folosește butonul de mai sus pentru a crea primul salon.</p>
+            </article>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="section-block">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">User management</span>
+            <h2>Profesionisti si manageri</h2>
+          </div>
+          <AdminCreateUserForm salons={salonCards} />
+        </div>
+        <div className="card-grid three-up">
+          {salonCards.flatMap((salon) =>
+            salon.professionals.map((professional) => (
+              <article key={professional._id} className="detail-card">
+                <div className="card-row">
+                  <h3>{professional.displayName || [professional.firstName, professional.lastName].filter(Boolean).join(" ")}</h3>
+                  <span className="tag">{professional.role === "salon-manager" ? "manager" : "profesionist"}</span>
+                </div>
+                <p className="helper-copy">{professional.email}</p>
+                <div className="metric-row">
+                  <span>Salon</span>
+                  <strong>{salon.name}</strong>
+                </div>
+                {professional.specialty ? (
+                  <div className="metric-row">
+                    <span>Specialitate</span>
+                    <strong>{professional.specialty}</strong>
+                  </div>
+                ) : null}
+                {professional.shareCode ? (
+                  <div className="metric-row">
+                    <span>Share code</span>
+                    <strong className="tag">{professional.shareCode}</strong>
+                  </div>
+                ) : null}
+              </article>
+            ))
+          )}
+          {salonCards.every((s) => s.professionals.length === 0) ? (
+            <article className="detail-card empty-card">
+              <p className="helper-copy">Niciun utilizator adăugat. Creează primul profesionist sau manager.</p>
+            </article>
+          ) : null}
         </div>
       </section>
 

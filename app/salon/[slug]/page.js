@@ -29,7 +29,7 @@ export default async function SalonPage({ params, searchParams }) {
 
   const professionals = await listProfessionalsForSalon(salon._id);
   const clients = await listClientsForSalon(salon._id);
-  const responses = await listRecentResponsesForSalon(salon._id);
+  const responses = await getRecentResponsesForSalon(salon._id);
   const professionalsWithShareCounts = await Promise.all(
     professionals.map(async (professional) => ({
       ...professional,

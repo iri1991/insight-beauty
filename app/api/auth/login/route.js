@@ -31,6 +31,8 @@ export async function POST(request) {
     redirectTo = `/salon/${salon.slug}`;
   } else if (user.role === "professional" && salon?.slug && professionalId) {
     redirectTo = `/salon/${salon.slug}/professionals/${professionalId}`;
+  } else if (user.role === "client") {
+    redirectTo = "/client/portal";
   }
 
   const response = NextResponse.json({

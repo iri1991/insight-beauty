@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AppShell } from "../components/app-shell";
+import { PwaFoundation } from "../components/pwa-foundation";
 import { getCurrentUser } from "../lib/auth";
 
 export const metadata = {
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }) {
     <html lang="ro">
       <body>
         <AppShell currentUser={currentUser}>{children}</AppShell>
+        <PwaFoundation />
       </body>
     </html>
   );

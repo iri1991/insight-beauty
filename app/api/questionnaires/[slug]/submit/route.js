@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { isDatabaseConfigured } from "../../../../../lib/auth";
+import { sendIntakeConfirmation } from "../../../../../lib/email";
 import { connectMongo } from "../../../../../lib/mongodb";
 import { getModels } from "../../../../../lib/mongoose-models";
 import {
@@ -196,17 +197,26 @@ export async function POST(request, { params }) {
     sourceRefs: questionnaire.sourceRefs
   });
 
+  const finalDossier = { ...dossier, dossierId: savedClient.dossierId };
+
+  const emailResult = await sendIntakeConfirmation({
+    client: { ...clientPayload, email: normalizedEmail },
+    salon,
+    professional,
+    questionnaire,
+    evaluation,
+    dossier: finalDossier
+  });
+
   return NextResponse.json({
     questionnaire: {
       slug: questionnaire.slug,
       title: questionnaire.title
     },
     evaluation,
-    dossier: {
-      ...dossier,
-      dossierId: savedClient.dossierId
-    },
+    dossier: finalDossier,
     emailPreview,
+    emailSent: emailResult.sent,
     persistence: {
       mode: "mongo",
       saved: true

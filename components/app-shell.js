@@ -2,24 +2,29 @@ import Link from "next/link";
 import { LogoutButton } from "./logout-button";
 
 function buildNavigation(currentUser) {
-  const baseNavigation = [
-    { href: "/", label: "Vision" },
-    { href: "/client/intake", label: "Client Intake" }
-  ];
+  const baseNavigation = [{ href: "/", label: "Vision" }];
 
   if (!currentUser) {
-    return [...baseNavigation, { href: "/login", label: "Login" }];
+    return [...baseNavigation, { href: "/client/intake", label: "Evaluare" }, { href: "/login", label: "Login" }];
   }
 
   if (currentUser.role === "admin") {
-    return [...baseNavigation, { href: "/admin", label: "Admin" }];
+    return [...baseNavigation, { href: "/client/intake", label: "Evaluare" }, { href: "/admin", label: "Admin Console" }];
+  }
+
+  if (currentUser.role === "client") {
+    return [...baseNavigation, { href: "/client/intake", label: "Evaluare nouă" }, { href: "/client/portal", label: "Dosarul meu" }];
   }
 
   if (currentUser.salonSlug) {
-    return [...baseNavigation, { href: `/salon/${currentUser.salonSlug}`, label: "Workspace" }];
+    return [
+      ...baseNavigation,
+      { href: "/client/intake", label: "Evaluare" },
+      { href: `/salon/${currentUser.salonSlug}`, label: "Workspace" }
+    ];
   }
 
-  return baseNavigation;
+  return [...baseNavigation, { href: "/client/intake", label: "Evaluare" }];
 }
 
 export function AppShell({ children, currentUser }) {
