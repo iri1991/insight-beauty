@@ -10,7 +10,9 @@
     "validate": "node scripts/validate-domain.mjs",
     "push:keys": "node scripts/generate-vapid-keys.mjs",
     "seed": "node scripts/seed-database.mjs",
-    "seed:reset": "node scripts/seed-database.mjs --reset"
+    "seed:reset": "node scripts/seed-database.mjs --reset",
+    "seed:questionnaires": "node scripts/seed-source-questionnaires.mjs",
+    "seed:questionnaires:reset": "node scripts/seed-source-questionnaires.mjs --reset"
   },
   "dependencies": {
     "mongoose": "^8.12.1",
