@@ -188,14 +188,21 @@ select {
 }
 
 .page-frame {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 1rem 1.2rem 4rem;
+  width: 100%;
+  padding-bottom: 4rem;
   position: relative;
   z-index: 2;
+  overflow-x: clip;
 }
 
-.page-stack,
+.page-stack {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 1rem 1.2rem 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
 .stack {
   display: grid;
   gap: 1.5rem;
@@ -1717,7 +1724,7 @@ select {
 
 /* Hero */
 .lp-hero {
-  margin: -1rem -1.2rem 0;
+  margin: 0;
   background: #100d09;
   color: #fff;
   padding: 0 1.2rem;
@@ -1911,7 +1918,7 @@ select {
 
 /* Manifesto */
 .lp-manifesto {
-  margin: 0 -1.2rem;
+  margin: 0;
   background: var(--accent);
   padding: 5rem 1.2rem;
 }
@@ -1997,7 +2004,7 @@ select {
 
 /* Kit de consultatie */
 .lp-kit {
-  padding: 6rem 0;
+  padding: 6rem 1.2rem;
 }
 
 .lp-kit-header {
@@ -2111,7 +2118,7 @@ select {
 
 /* Baumann section */
 .lp-baumann-section {
-  margin: 0 -1.2rem;
+  margin: 0;
   background: #0f0c09;
   padding: 6rem 1.2rem;
   position: relative;
@@ -2206,7 +2213,7 @@ select {
 
 /* Flow / how it works */
 .lp-flow {
-  padding: 6rem 0;
+  padding: 6rem 1.2rem;
 }
 
 .lp-flow-header {
@@ -2277,7 +2284,7 @@ select {
 
 /* Roles */
 .lp-roles {
-  margin: 0 -1.2rem;
+  margin: 0;
   background: #f5ede6;
   padding: 6rem 1.2rem;
 }
@@ -2343,7 +2350,7 @@ select {
 
 /* CTA */
 .lp-cta {
-  margin: 0 -1.2rem;
+  margin: 0;
   background: #100d09;
   padding: 6rem 1.2rem;
   position: relative;
@@ -2381,7 +2388,7 @@ select {
 
 /* Footer */
 .lp-footer {
-  margin: 0 -1.2rem -4rem;
+  margin: 0;
   background: #0a0806;
   border-top: 1px solid rgba(255,255,255,0.05);
   padding: 4rem 1.2rem 3rem;
