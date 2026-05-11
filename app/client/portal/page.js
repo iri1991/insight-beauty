@@ -15,6 +15,14 @@ async function getClientDossier(email) {
   return ClientProfile.findOne({ email: email.toLowerCase() }).sort({ createdAt: 1 }).lean().exec();
 }
 
+const TREATMENT_STATUS_LABELS = {
+  draft: "Draft",
+  active: "Activ",
+  "pending-debrief": "Necesită debriefing",
+  complete: "Finalizat",
+  paused: "În pauză"
+};
+
 function formatDate(d) {
   if (!d) return "—";
   return String(d).slice(0, 10);
@@ -200,10 +208,6 @@ export default async function ClientPortalPage() {
                   <span className="tag tag-warn">Nou</span>
                 </div>
                 <p>{q.description || "Chestionar de evaluare alocat de profesionistul tău."}</p>
-                <div className="metric-row">
-                  <span>Tip</span>
-                  <strong>{q.kind}</strong>
-                </div>
                 <ClientQuestionnaireFiller questionnaire={q} />
               </article>
             ))}
@@ -240,7 +244,7 @@ export default async function ClientPortalPage() {
                     <h3>{a.label}</h3>
                     {typeof a.score === "number" ? <span className="tag">{a.score}p</span> : null}
                   </div>
-                  <p className="helper-copy">{a.questionnaireSlug} · {formatDate(a.submittedAt)}</p>
+                  <p className="helper-copy">{formatDate(a.submittedAt)}</p>
 
                   {typeof a.score === "number" ? (
                     <ScoreBar score={a.score} maxScore={40} />
@@ -291,7 +295,7 @@ export default async function ClientPortalPage() {
               <h2>Program activ</h2>
             </div>
             <span className={`tag ${treatmentProgram.status === "pending-debrief" ? "tag-warn" : "tag-success"}`}>
-              {treatmentProgram.status}
+              {TREATMENT_STATUS_LABELS[treatmentProgram.status] || treatmentProgram.status}
             </span>
           </div>
 
@@ -358,7 +362,7 @@ export default async function ClientPortalPage() {
                   <h3>{a.label}</h3>
                   {typeof a.score === "number" ? <span className="tag">{a.score}p</span> : null}
                 </div>
-                <p className="helper-copy">{a.questionnaireSlug} · {formatDate(a.submittedAt)}</p>
+                <p className="helper-copy">{formatDate(a.submittedAt)}</p>
                 {a.insight ? <p style={{ fontSize: "0.88rem", margin: "0.5rem 0 0", color: "var(--muted)" }}>{a.insight}</p> : null}
               </article>
             ))}
@@ -380,7 +384,7 @@ export default async function ClientPortalPage() {
               <article key={i} className="timeline-card">
                 <strong>{s.service}</strong>
                 <p>{s.objective || s.notes || "—"}</p>
-                <p className="helper-copy">{formatDate(s.date)} · {s.status}</p>
+                <p className="helper-copy">{formatDate(s.date)}</p>
                 {s.outcome ? <p className="helper-copy">Rezultat: {s.outcome}</p> : null}
               </article>
             ))}

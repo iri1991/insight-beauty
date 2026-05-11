@@ -7,12 +7,21 @@ import { listQuestionnaireCatalog } from "../../lib/questionnaire-engine";
 import { getAdminSnapshot, listClientsForSalon, listProfessionalsForSalon, listSalons } from "../../lib/repositories";
 import { getSourceDocuments, getSourceStats } from "../../lib/source-library";
 
+const STATUS_LABELS = {
+  active: "Activ",
+  draft: "Draft",
+  archived: "Arhivat",
+  "mapped-source": "Mapat",
+  "awaiting-question-bank": "În așteptare",
+  "source-indexed": "Indexat"
+};
+
 export default async function AdminPage() {
   if (!isDatabaseConfigured()) {
     return (
       <AccessDenied
-        title="Mongo neconfigurat"
-        body="Configureaza baza de date si ruleaza seed-ul initial pentru a folosi consola admin cu date reale."
+        title="Baza de date neconfigurată"
+        body="Configurează baza de date și rulează seed-ul inițial pentru a folosi consola admin."
       />
     );
   }
@@ -20,7 +29,7 @@ export default async function AdminPage() {
   const user = await requireUser();
 
   if (!canAccessAdmin(user)) {
-    return <AccessDenied body="Doar un utilizator cu rol admin poate accesa consola globala." />;
+    return <AccessDenied body="Accesul în consola de administrare este rezervat utilizatorilor cu rol de admin." />;
   }
 
   const questionnaireCatalog = listQuestionnaireCatalog();
@@ -41,27 +50,27 @@ export default async function AdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Admin console</span>
-            <h1>Control tower pentru intrebari, interpretari, tenanturi si impersonare.</h1>
+            <span className="eyebrow">Consolă administrativă</span>
+            <h1>Panou de control global</h1>
+            <p className="lead-copy">Gestionează saloane, profesioniști, chestionare și configurările platformei.</p>
           </div>
-          <span className="tag tag-soft">cross-salon visibility only for admins</span>
         </div>
 
         <div className="metric-grid">
           <article className="metric-card">
-            <span>Saloane</span>
+            <span>Saloane active</span>
             <strong>{adminSnapshot.salons}</strong>
           </article>
           <article className="metric-card">
-            <span>Profesionisti</span>
+            <span>Profesioniști</span>
             <strong>{adminSnapshot.professionals}</strong>
           </article>
           <article className="metric-card">
-            <span>Clienti activi</span>
+            <span>Clienți activi</span>
             <strong>{adminSnapshot.activeClients}</strong>
           </article>
           <article className="metric-card">
-            <span>Documente sursa</span>
+            <span>Documente sursă</span>
             <strong>{sourceStats.total || adminSnapshot.sourceDocumentsIndexed}</strong>
           </article>
         </div>
@@ -70,11 +79,11 @@ export default async function AdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Questionnaire registry</span>
-            <h2>Formulare și chestionare</h2>
+            <span className="eyebrow">Chestionare</span>
+            <h2>Registrul de formulare și chestionare</h2>
           </div>
           <Link className="button primary" href="/admin/questionnaires">
-            Gestionează formulare →
+            Gestionează →
           </Link>
         </div>
         <div className="card-grid three-up">
@@ -82,16 +91,18 @@ export default async function AdminPage() {
             <article key={questionnaire.slug} className="detail-card">
               <div className="card-row">
                 <h3>{questionnaire.title}</h3>
-                <span className="tag">{questionnaire.status}</span>
+                <span className={`tag ${questionnaire.status === "active" ? "tag-success" : "tag-soft"}`}>
+                  {STATUS_LABELS[questionnaire.status] || questionnaire.status}
+                </span>
               </div>
               <p>{questionnaire.description}</p>
               <div className="metric-row">
-                <span>Audience</span>
-                <strong>{questionnaire.audience}</strong>
+                <span>Public țintă</span>
+                <strong>{questionnaire.audience === "client" ? "Client" : questionnaire.audience === "professional" ? "Profesionist" : questionnaire.audience}</strong>
               </div>
               <div className="metric-row">
-                <span>Coverage</span>
-                <strong>{questionnaire.sourceCoverage}</strong>
+                <span>Acoperire</span>
+                <strong>{questionnaire.sourceCoverage === "full" ? "Completă" : questionnaire.sourceCoverage}</strong>
               </div>
               <Link className="text-link" href={`/admin/questionnaires/${questionnaire.slug}`}>
                 Editează →
@@ -104,8 +115,8 @@ export default async function AdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Tenant boundaries</span>
-            <h2>Saloane gestionate</h2>
+            <span className="eyebrow">Saloane</span>
+            <h2>Saloane și spații de lucru gestionate</h2>
           </div>
           <AdminCreateSalonForm />
         </div>
@@ -118,24 +129,21 @@ export default async function AdminPage() {
               </div>
               <p className="helper-copy">{salon.city}</p>
               <div className="metric-row">
-                <span>Profesionisti</span>
+                <span>Profesioniști</span>
                 <strong>{salon.professionals.length}</strong>
               </div>
               <div className="metric-row">
-                <span>Clienti</span>
+                <span>Clienți</span>
                 <strong>{salon.clients.length}</strong>
               </div>
-              <p className="helper-copy">
-                Date izolate per tenant. Accesul admin este extins prin impersonare controlată.
-              </p>
               <Link className="text-link" href={`/salon/${salon.slug}?asAdmin=1`}>
-                Deschide ca admin
+                Deschide workspace →
               </Link>
             </article>
           ))}
           {salonCards.length === 0 ? (
             <article className="detail-card empty-card">
-              <p className="helper-copy">Niciun salon creat încă. Folosește butonul de mai sus pentru a crea primul salon.</p>
+              <p className="helper-copy">Niciun salon creat încă. Folosește butonul de mai sus pentru a adăuga primul salon.</p>
             </article>
           ) : null}
         </div>
@@ -144,8 +152,8 @@ export default async function AdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">User management</span>
-            <h2>Profesionisti si manageri</h2>
+            <span className="eyebrow">Utilizatori</span>
+            <h2>Profesioniști și manageri de salon</h2>
           </div>
           <AdminCreateUserForm salons={salonCards} />
         </div>
@@ -155,7 +163,7 @@ export default async function AdminPage() {
               <article key={professional._id} className="detail-card">
                 <div className="card-row">
                   <h3>{professional.displayName || [professional.firstName, professional.lastName].filter(Boolean).join(" ")}</h3>
-                  <span className="tag">{professional.role === "salon-manager" ? "manager" : "profesionist"}</span>
+                  <span className="tag">{professional.role === "salon-manager" ? "Manager" : "Profesionist"}</span>
                 </div>
                 <p className="helper-copy">{professional.email}</p>
                 <div className="metric-row">
@@ -170,7 +178,7 @@ export default async function AdminPage() {
                 ) : null}
                 {professional.shareCode ? (
                   <div className="metric-row">
-                    <span>Share code</span>
+                    <span>Cod de distribuire</span>
                     <strong className="tag">{professional.shareCode}</strong>
                   </div>
                 ) : null}
@@ -188,8 +196,8 @@ export default async function AdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Source library</span>
-            <h2>Trasabilitate documentara</h2>
+            <span className="eyebrow">Documente sursă</span>
+            <h2>Biblioteca de materiale clinice indexate</h2>
           </div>
         </div>
         <div className="card-grid two-up">
@@ -197,7 +205,7 @@ export default async function AdminPage() {
             <article key={document.id} className="detail-card">
               <div className="card-row">
                 <h3>{document.fileName}</h3>
-                <span className="tag">{document.kind}</span>
+                <span className="tag tag-soft">{document.kind}</span>
               </div>
               <p>{document.preview}</p>
             </article>

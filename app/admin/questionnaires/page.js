@@ -4,10 +4,19 @@ import { canAccessAdmin, isDatabaseConfigured, requireUser } from "../../../lib/
 import { listQuestionnairesForAdmin } from "../../../lib/questionnaire-db";
 
 const KIND_LABELS = {
-  "choice-sum": "Choice Sum",
-  "acne-index": "Acne Index",
-  "baumann-dimensions": "Baumann Dims",
-  custom: "Custom"
+  "choice-sum": "Sumă de puncte",
+  "acne-index": "Index acnee",
+  "baumann-dimensions": "Dimensiuni Baumann",
+  custom: "Personalizat"
+};
+
+const STATUS_LABELS = {
+  active: "Activ",
+  draft: "Draft",
+  archived: "Arhivat",
+  "mapped-source": "Mapat",
+  "awaiting-question-bank": "În așteptare",
+  "source-indexed": "Indexat"
 };
 
 const STATUS_COLORS = {
@@ -23,6 +32,12 @@ const DELIVERY_LABELS = {
   public: "Public",
   "public-assisted": "Asistat",
   workspace: "Workspace"
+};
+
+const AUDIENCE_LABELS = {
+  client: "Client",
+  "client-assisted": "Client asistat",
+  professional: "Profesionist"
 };
 
 export default async function QuestionnairesAdminPage() {
@@ -45,8 +60,8 @@ export default async function QuestionnairesAdminPage() {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Questionnaire registry</span>
-            <h1>Gestionare formulare și chestionare</h1>
+            <span className="eyebrow">Chestionare</span>
+            <h1>Registrul de formulare clinice</h1>
             <p className="lead-copy">
               Creează, editează și configurează orice chestionar: întrebări, opțiuni, punctaje și interpretări.
             </p>
@@ -66,11 +81,11 @@ export default async function QuestionnairesAdminPage() {
             <strong>{activeCount}</strong>
           </article>
           <article className="metric-card">
-            <span>Gestionate în DB</span>
+            <span>Gestionate în baza de date</span>
             <strong>{dbCount}</strong>
           </article>
           <article className="metric-card">
-            <span>Template statice</span>
+            <span>Șabloane predefinite</span>
             <strong>{questionnaires.length - dbCount}</strong>
           </article>
         </div>
@@ -79,12 +94,12 @@ export default async function QuestionnairesAdminPage() {
       <section className="section-block">
         <div className="q-registry-table">
           <div className="q-registry-header">
-            <span>Titlu / Slug</span>
-            <span>Tip</span>
-            <span>Audienta</span>
-            <span>Livrare</span>
+            <span>Titlu / Identificator</span>
+            <span>Tip motor</span>
+            <span>Public țintă</span>
+            <span>Mod livrare</span>
             <span>Status</span>
-            <span>Actiuni</span>
+            <span>Acțiuni</span>
           </div>
           {questionnaires.map((q) => (
             <div key={q.slug} className={`q-registry-row${q.source === "static" ? " q-row-static" : ""}`}>
@@ -97,13 +112,13 @@ export default async function QuestionnairesAdminPage() {
                 <span className="tag">{KIND_LABELS[q.kind] || q.kind}</span>
               </div>
               <div className="q-cell">
-                <span className="tag tag-soft">{q.audience}</span>
+                <span className="tag tag-soft">{AUDIENCE_LABELS[q.audience] || q.audience}</span>
               </div>
               <div className="q-cell">
                 <span className="tag tag-soft">{DELIVERY_LABELS[q.deliveryMode] || q.deliveryMode}</span>
               </div>
               <div className="q-cell">
-                <span className={STATUS_COLORS[q.status] || "tag"}>{q.status}</span>
+                <span className={STATUS_COLORS[q.status] || "tag"}>{STATUS_LABELS[q.status] || q.status}</span>
               </div>
               <div className="q-cell-actions">
                 {q.source === "static" ? (
@@ -127,7 +142,7 @@ function ImportToDbButton({ slug, template }) {
     <form action={`/api/admin/questionnaires`} method="POST">
       <input type="hidden" name="_template" value={JSON.stringify(template)} />
       <Link className="button secondary small" href={`/admin/questionnaires/${slug}?import=1`}>
-        Import &amp; Editează
+        Activează &amp; editează
       </Link>
     </form>
   );

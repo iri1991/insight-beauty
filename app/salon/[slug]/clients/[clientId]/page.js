@@ -5,11 +5,37 @@ import { canAccessClientDossier, isDatabaseConfigured, requireUser } from "../..
 import { getClientById, getProfessionalById, getSalonBySlug } from "../../../../../lib/repositories";
 import { getTipologyByCode } from "../../../../../lib/source-library";
 
+const TREATMENT_STATUS_LABELS = {
+  draft: "Draft",
+  active: "Activ",
+  "pending-debrief": "Necesită debriefing",
+  complete: "Finalizat",
+  paused: "În pauză"
+};
+
+const ASSIGNMENT_STATUS_LABELS = {
+  pending: "Necompletat",
+  completed: "Completat",
+  expired: "Expirat"
+};
+
+const CHANNEL_LABELS = {
+  link: "Link direct",
+  email: "Email",
+  sms: "SMS",
+  app: "Aplicație"
+};
+
+function formatDate(d) {
+  if (!d) return "—";
+  return String(d).slice(0, 10);
+}
+
 export default async function ClientDossierPage({ params }) {
   const resolvedParams = await params;
 
   if (!isDatabaseConfigured()) {
-    return <AccessDenied title="Mongo neconfigurat" body="Configureaza baza de date pentru a accesa dosarele clientilor." />;
+    return <AccessDenied title="Serviciu indisponibil" body="Configurează baza de date pentru a accesa dosarele clienților." />;
   }
 
   const salon = await getSalonBySlug(resolvedParams.slug);
@@ -33,12 +59,14 @@ export default async function ClientDossierPage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Client dossier</span>
+            <span className="eyebrow">Dosar client</span>
             <h1>
               {client.firstName} {client.lastName}
             </h1>
           </div>
-          <span className="tag tag-soft">{client.dossierId}</span>
+          {client.dossierId ? (
+            <span className="tag tag-soft">#{client.dossierId.slice(-8).toUpperCase()}</span>
+          ) : null}
         </div>
 
         <div className="metric-grid">
@@ -52,11 +80,15 @@ export default async function ClientDossierPage({ params }) {
           </article>
           <article className="metric-card">
             <span>Ultima evaluare</span>
-            <strong>{client.latestAssessment?.label || "Fara evaluare"}</strong>
+            <strong>{client.latestAssessment?.label || "Fără evaluare"}</strong>
           </article>
           <article className="metric-card">
-            <span>Trend</span>
-            <strong>{client.progressSnapshot?.trend || "n/a"}</strong>
+            <span>Evoluție</span>
+            <strong>
+              {client.progressSnapshot?.trend === "improving" ? "Îmbunătățire" :
+               client.progressSnapshot?.trend === "worsening" ? "În creștere" :
+               client.progressSnapshot?.trend === "stable" ? "Stabil" : "—"}
+            </strong>
           </article>
         </div>
       </section>
@@ -66,31 +98,31 @@ export default async function ClientDossierPage({ params }) {
           <div className="panel">
             <div className="section-heading">
               <div>
-                <span className="eyebrow">Snapshot</span>
-                <h2>Context clinic si confidentialitate</h2>
+                <span className="eyebrow">Profil clinic</span>
+                <h2>Date personale și context de îngrijire</h2>
               </div>
             </div>
 
             <div className="card-grid two-up">
               <article className="detail-card">
-                <h3>Date de baza</h3>
+                <h3>Date de bază</h3>
                 <div className="metric-row">
                   <span>Email</span>
                   <strong>{client.email}</strong>
                 </div>
                 <div className="metric-row">
                   <span>Telefon</span>
-                  <strong>{client.phone}</strong>
+                  <strong>{client.phone || "—"}</strong>
                 </div>
                 <div className="metric-row">
-                  <span>Segment varsta</span>
-                  <strong>{client.ageBand}</strong>
+                  <span>Segment vârstă</span>
+                  <strong>{client.ageBand || "—"}</strong>
                 </div>
               </article>
 
               <article className="detail-card">
-                <h3>Confidentialitate</h3>
-                <p>Datele acestui dosar sunt vizibile doar in tenantul salonului si pentru admin prin impersonare controlata.</p>
+                <h3>Consimțământ și confidențialitate</h3>
+                <p>Datele acestui dosar sunt vizibile exclusiv în cadrul salonului și pentru personalul autorizat.</p>
                 <div className="tags-row">
                   {(client.consentStatus || []).map((item) => (
                     <span key={item} className="tag tag-soft">
@@ -103,8 +135,8 @@ export default async function ClientDossierPage({ params }) {
 
             <article className="detail-card">
               <div className="card-row">
-                <h3>Preocupari principale</h3>
-                <span className="tag">{client.baumannType}</span>
+                <h3>Preocupări principale</h3>
+                {client.baumannType ? <span className="tag">{client.baumannType}</span> : null}
               </div>
               <div className="tags-row">
                 {(client.primaryConcerns || []).map((concern) => (
@@ -113,29 +145,35 @@ export default async function ClientDossierPage({ params }) {
                   </span>
                 ))}
               </div>
-              <p className="helper-copy">{client.progressSnapshot?.baseline || "Baseline in curs de completare."}</p>
-              <p>{client.progressSnapshot?.current || "Snapshot-ul curent va fi actualizat dupa debriefing."}</p>
+              {client.progressSnapshot?.baseline ? (
+                <p className="helper-copy">{client.progressSnapshot.baseline}</p>
+              ) : null}
+              {client.progressSnapshot?.current ? (
+                <p>{client.progressSnapshot.current}</p>
+              ) : null}
             </article>
           </div>
 
           <aside className="panel results-shell">
             <div className="hero-card inset-card">
-              <span className="eyebrow">Baumann profile</span>
+              <span className="eyebrow">Profil Baumann</span>
               <h3>{client.baumannProfile?.code || client.baumannType || "Necompletat"}</h3>
               <p className="lead-copy">
-                {client.baumannProfile?.summary || "Profilul Baumann va fi populat dupa evaluarea profesionala."}
+                {client.baumannProfile?.summary || "Profilul Baumann va fi populat după evaluarea profesională."}
               </p>
             </div>
 
-            <div className="detail-card">
-              <span className="eyebrow">Dimensiuni</span>
-              {Object.entries(client.baumannProfile?.dimensions || {}).map(([key, value]) => (
-                <div key={key} className="metric-row">
-                  <span>{key}</span>
-                  <strong>{value}p</strong>
-                </div>
-              ))}
-            </div>
+            {Object.keys(client.baumannProfile?.dimensions || {}).length > 0 ? (
+              <div className="detail-card">
+                <span className="eyebrow">Dimensiuni</span>
+                {Object.entries(client.baumannProfile.dimensions).map(([key, value]) => (
+                  <div key={key} className="metric-row">
+                    <span>{key}</span>
+                    <strong>{value}p</strong>
+                  </div>
+                ))}
+              </div>
+            ) : null}
 
             {tipologyDocument ? (
               <div className="detail-card">
@@ -150,10 +188,12 @@ export default async function ClientDossierPage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Treatment plan</span>
-            <h2>Plan activ si homecare</h2>
+            <span className="eyebrow">Plan de tratament</span>
+            <h2>Program activ și rutină de îngrijire</h2>
           </div>
-          <span className="tag">{client.treatmentProgram?.status || "draft"}</span>
+          <span className="tag">
+            {TREATMENT_STATUS_LABELS[client.treatmentProgram?.status] || client.treatmentProgram?.status || "Draft"}
+          </span>
         </div>
 
         <DossierOperations
@@ -177,7 +217,7 @@ export default async function ClientDossierPage({ params }) {
           </article>
 
           <article className="detail-card">
-            <h3>Protocol in cabinet</h3>
+            <h3>Protocol în cabinet</h3>
             <div className="stack compact-list">
               {(client.treatmentProgram?.inCabinProtocols || []).map((protocol) => (
                 <p key={protocol}>{protocol}</p>
@@ -186,7 +226,7 @@ export default async function ClientDossierPage({ params }) {
           </article>
 
           <article className="detail-card">
-            <h3>Homecare</h3>
+            <h3>Rutină acasă</h3>
             <div className="stack compact-list">
               {(client.treatmentProgram?.homecare || []).map((step) => (
                 <p key={step}>{step}</p>
@@ -198,19 +238,19 @@ export default async function ClientDossierPage({ params }) {
         <div className="card-grid two-up">
           <article className="detail-card">
             <div className="metric-row">
-              <span>Cadenta</span>
-              <strong>{client.treatmentProgram?.cadence || "Nesetata"}</strong>
+              <span>Cadență ședințe</span>
+              <strong>{client.treatmentProgram?.cadence || "Nesetată"}</strong>
             </div>
             <div className="metric-row">
-              <span>Review</span>
-              <strong>{client.treatmentProgram?.reviewCadence || "Nesetat"}</strong>
+              <span>Revizuire plan</span>
+              <strong>{client.treatmentProgram?.reviewCadence || "Nesetată"}</strong>
             </div>
           </article>
 
           <article className="detail-card">
             <div className="metric-row">
-              <span>Next session</span>
-              <strong>{client.nextSession ? client.nextSession.slice(0, 16).replace("T", " ") : "Nesetata"}</strong>
+              <span>Următoarea ședință</span>
+              <strong>{client.nextSession ? client.nextSession.slice(0, 16).replace("T", " ") : "Nesetată"}</strong>
             </div>
             <div className="tags-row">
               {(client.riskFlags || []).map((flag) => (
@@ -226,23 +266,25 @@ export default async function ClientDossierPage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Tracking</span>
-            <h2>Evaluari, alocari si sedinte</h2>
+            <span className="eyebrow">Istoric</span>
+            <h2>Evaluări, chestionare distribuite și ședințe</h2>
           </div>
         </div>
 
         <div className="card-grid two-up">
           <article className="detail-card">
-            <h3>Istoric evaluari</h3>
+            <h3>Istoric evaluări</h3>
             <div className="timeline compact-timeline">
               {(client.assessmentHistory || []).map((assessment) => (
                 <article key={`${assessment.questionnaireSlug}-${assessment.submittedAt}`} className="timeline-card">
                   <strong>{assessment.label}</strong>
-                  <p>{assessment.questionnaireSlug}</p>
-                  <p>{assessment.insight}</p>
-                  <p className="helper-copy">{assessment.submittedAt ? assessment.submittedAt.slice(0, 10) : "fara data"}</p>
+                  {assessment.insight ? <p>{assessment.insight}</p> : null}
+                  <p className="helper-copy">{formatDate(assessment.submittedAt)}</p>
                 </article>
               ))}
+              {(client.assessmentHistory || []).length === 0 ? (
+                <p className="helper-copy">Nicio evaluare înregistrată.</p>
+              ) : null}
             </div>
           </article>
 
@@ -252,29 +294,39 @@ export default async function ClientDossierPage({ params }) {
               {(client.questionnaireAssignments || []).map((assignment) => (
                 <article key={`${assignment.questionnaireSlug}-${assignment.sharedAt}`} className="timeline-card">
                   <strong>{assignment.questionnaireSlug}</strong>
-                  <p>{assignment.channel}</p>
                   <p className="helper-copy">
-                    {assignment.status} · {assignment.sharedAt ? assignment.sharedAt.slice(0, 10) : "fara data"}
+                    {ASSIGNMENT_STATUS_LABELS[assignment.status] || assignment.status}
+                    {" · "}
+                    {CHANNEL_LABELS[assignment.channel] || assignment.channel || ""}
+                    {" · "}
+                    {formatDate(assignment.sharedAt)}
                   </p>
                 </article>
               ))}
+              {(client.questionnaireAssignments || []).length === 0 ? (
+                <p className="helper-copy">Niciun chestionar distribuit.</p>
+              ) : null}
             </div>
           </article>
         </div>
 
         <article className="detail-card">
-          <h3>Istoric sedinte</h3>
+          <h3>Istoric ședințe</h3>
           <div className="timeline">
             {(client.sessionHistory || []).map((session) => (
               <article key={session.id} className="timeline-card">
                 <strong>{session.service}</strong>
-                <p>{session.objective}</p>
-                <p>{session.notes}</p>
+                {session.objective ? <p>{session.objective}</p> : null}
+                {session.notes ? <p>{session.notes}</p> : null}
                 <p className="helper-copy">
-                  {session.date} · {session.status}
+                  {formatDate(session.date)}
+                  {session.status ? ` · ${session.status}` : ""}
                 </p>
               </article>
             ))}
+            {(client.sessionHistory || []).length === 0 ? (
+              <p className="helper-copy">Nicio ședință înregistrată.</p>
+            ) : null}
           </div>
         </article>
       </section>
