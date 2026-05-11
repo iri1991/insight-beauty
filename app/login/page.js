@@ -6,41 +6,34 @@ export default async function LoginPage({ searchParams }) {
   const returnTo = params?.returnTo || null;
 
   return (
-    <div className="stack page-stack">
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Autentificare</span>
-            <h1>Intră în Insight Beauty</h1>
-            {returnTo ? (
-              <p className="lead-copy">Autentifică-te pentru a continua evaluarea.</p>
-            ) : null}
-          </div>
+    <div className="auth-page">
+      <div className="auth-shell">
+        <div className="auth-brand">
+          <span className="auth-logo-mark" aria-hidden="true">✦</span>
+          <span className="auth-brand-name">Insight Beauty</span>
         </div>
 
+        <header className="auth-header">
+          <h1>Bun venit înapoi</h1>
+          <p className="auth-lead">
+            {returnTo
+              ? "Autentifică-te pentru a continua evaluarea clientului."
+              : "Intră în contul tău pentru a accesa platforma."}
+          </p>
+        </header>
+
         {isDatabaseConfigured() ? (
-          <div className="card-grid two-up">
-            <div className="detail-card">
-              <h3>Acces securizat pe roluri</h3>
-              <p>
-                Adminii, managerii de salon și profesioniștii accesează platforma cu conturile lor.
-                Clienții se autentifică cu contul primit de la salon.
-              </p>
-              <p className="helper-copy">
-                Nu ai cont? Contactează salonul sau profesionistul tău pentru a-ți fi creat un cont.
-              </p>
-            </div>
-            <LoginForm returnTo={returnTo} />
-          </div>
+          <LoginForm returnTo={returnTo} />
         ) : (
-          <div className="detail-card">
-            <p>
-              Configurează <code>MONGODB_URI</code> în fișierul <code>.env</code>, rulează seed-ul
-              inițial (<code>npm run seed</code>) și apoi autentifică-te.
-            </p>
+          <div className="auth-notice">
+            <p>Platforma nu este disponibilă momentan. Contactează administratorul pentru asistență.</p>
           </div>
         )}
-      </section>
+
+        <p className="auth-footer-note">
+          Nu ai cont? Contactează salonul sau profesionistul tău — accesul îți va fi creat direct.
+        </p>
+      </div>
     </div>
   );
 }

@@ -6,11 +6,16 @@ import { canAccessProfessional, isDatabaseConfigured, requireUser } from "../../
 import { getProfessionalShareBundles } from "../../../../../lib/repositories";
 import { getTipologyCatalog } from "../../../../../lib/source-library";
 
+function formatDate(d) {
+  if (!d) return "—";
+  return String(d).slice(0, 10);
+}
+
 export default async function ProfessionalWorkspacePage({ params }) {
   const resolvedParams = await params;
 
   if (!isDatabaseConfigured()) {
-    return <AccessDenied title="Mongo neconfigurat" body="Configureaza baza de date pentru a folosi workspace-ul profesionistului." />;
+    return <AccessDenied title="Serviciu indisponibil" body="Configurează baza de date pentru a folosi workspace-ul profesionistului." />;
   }
 
   const { getSalonBySlug, getProfessionalById, listClientsForProfessional, listRecentResponsesForProfessional } = await import(
@@ -44,14 +49,14 @@ export default async function ProfessionalWorkspacePage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Professional workspace</span>
+            <span className="eyebrow">Workspace profesionist</span>
             <h1>{professional.displayName || [professional.firstName, professional.lastName].filter(Boolean).join(" ")}</h1>
           </div>
           <div className="button-row">
             <a className="button primary" href={`/salon/${salon.slug}/professionals/${professional._id}/intake`}>
               + Evaluare nouă
             </a>
-            <span className="tag tag-soft">{professional.specialty}</span>
+            {professional.specialty ? <span className="tag tag-soft">{professional.specialty}</span> : null}
           </div>
         </div>
 
@@ -61,15 +66,15 @@ export default async function ProfessionalWorkspacePage({ params }) {
             <strong>{salon.name}</strong>
           </article>
           <article className="metric-card">
-            <span>Clienti activi</span>
+            <span>Clienți activi</span>
             <strong>{clients.length}</strong>
           </article>
           <article className="metric-card">
             <span>Follow-up azi</span>
-            <strong>{professional.todayFollowUps}</strong>
+            <strong>{professional.todayFollowUps || 0}</strong>
           </article>
           <article className="metric-card">
-            <span>Capacitate saptamanala</span>
+            <span>Capacitate săptămânală</span>
             <strong>{professional.weeklyCapacity || 0}</strong>
           </article>
         </div>
@@ -78,8 +83,8 @@ export default async function ProfessionalWorkspacePage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Share questionnaires</span>
-            <h2>Linkuri gata de trimis catre client</h2>
+            <span className="eyebrow">Link-uri de evaluare</span>
+            <h2>Chestionare gata de trimis clienților</h2>
           </div>
         </div>
 
@@ -88,15 +93,20 @@ export default async function ProfessionalWorkspacePage({ params }) {
             <article key={bundle.questionnaireSlug} className="detail-card">
               <div className="card-row">
                 <h3>{bundle.title}</h3>
-                <span className="tag">{bundle.shareCode}</span>
+                <span className="tag tag-soft">{bundle.shareCode}</span>
               </div>
               <p>{bundle.description}</p>
               <p className="helper-copy">{bundle.intakeLink}</p>
               <Link className="text-link" href={bundle.intakeLink}>
-                Deschide linkul de intake
+                Deschide link-ul de evaluare →
               </Link>
             </article>
           ))}
+          {shareBundles.length === 0 ? (
+            <article className="detail-card empty-card">
+              <p className="helper-copy">Niciun link de evaluare generat. Adaugă clienți pentru a genera link-uri personalizate.</p>
+            </article>
+          ) : null}
         </div>
       </section>
 
@@ -105,8 +115,8 @@ export default async function ProfessionalWorkspacePage({ params }) {
       <section className="section-block">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Active dossiers</span>
-            <h2>Clientii alocati acestui profesionist</h2>
+            <span className="eyebrow">Dosare active</span>
+            <h2>Clienții alocați</h2>
           </div>
         </div>
 
@@ -119,14 +129,18 @@ export default async function ProfessionalWorkspacePage({ params }) {
                 </h3>
                 <span className="tag">{client.baumannType}</span>
               </div>
-              <p>{client.treatmentPlanSummary || "Planul va fi completat dupa evaluarea curenta."}</p>
+              <p>{client.treatmentPlanSummary || "Planul va fi completat după evaluarea curentă."}</p>
               <div className="metric-row">
                 <span>Ultima evaluare</span>
-                <strong>{client.latestAssessment?.label || "Fara evaluare"}</strong>
+                <strong>{client.latestAssessment?.label || "Fără evaluare"}</strong>
               </div>
               <div className="metric-row">
-                <span>Trend</span>
-                <strong>{client.progressSnapshot?.trend || "n/a"}</strong>
+                <span>Evoluție</span>
+                <strong>
+                  {client.progressSnapshot?.trend === "improving" ? "Îmbunătățire" :
+                   client.progressSnapshot?.trend === "worsening" ? "În creștere" :
+                   client.progressSnapshot?.trend === "stable" ? "Stabil" : "—"}
+                </strong>
               </div>
               <div className="tags-row">
                 {(client.primaryConcerns || []).map((concern) => (
@@ -136,31 +150,37 @@ export default async function ProfessionalWorkspacePage({ params }) {
                 ))}
               </div>
               <Link className="text-link" href={`/salon/${salon.slug}/clients/${client._id}`}>
-                Deschide fisa completa
+                Deschide fișa completă →
               </Link>
             </article>
           ))}
-        </div>
-      </section>
-
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Recent responses</span>
-            <h2>Ultimele raspunsuri primite</h2>
-          </div>
-        </div>
-
-        <div className="timeline">
-          {responses.map((response) => (
-            <article key={response._id} className="timeline-card">
-              <strong>{response.evaluation?.band?.label || response.resultLabel}</strong>
-              <p>{response.questionnaireSlug}</p>
-              <p className="helper-copy">{(response.createdAt || response.submittedAt || "").slice(0, 10)}</p>
+          {clients.length === 0 ? (
+            <article className="detail-card empty-card">
+              <p className="helper-copy">Niciun client alocat. Trimite un link de evaluare pentru a înregistra primul client.</p>
             </article>
-          ))}
+          ) : null}
         </div>
       </section>
+
+      {responses.length > 0 ? (
+        <section className="section-block">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Activitate recentă</span>
+              <h2>Ultimele evaluări primite</h2>
+            </div>
+          </div>
+
+          <div className="timeline">
+            {responses.map((response) => (
+              <article key={response._id} className="timeline-card">
+                <strong>{response.evaluation?.band?.label || response.resultLabel || "Evaluare completată"}</strong>
+                <p className="helper-copy">{formatDate(response.createdAt || response.submittedAt)}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }
