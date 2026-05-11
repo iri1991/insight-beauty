@@ -239,26 +239,94 @@ const testimonials = [
   }
 ];
 
+const questionnaires = [
+  {
+    slug: "baumann-profile",
+    title: "Profilare Baumann 16 tipuri",
+    body: "Motor intern de evaluare profesională pe 4 dimensiuni — O/D, S/R, P/N, W/T — care calculează automat tipologia completă și generează recomandări de tratament și homecare personalizate.",
+    badge: "Profesionist",
+    color: "var(--accent)",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M12 3v9l5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    )
+  },
+  {
+    slug: "fitzpatrick-screening",
+    title: "Fototip Fitzpatrick",
+    body: "Chestionar self-service în 8 întrebări pentru determinarea fototipului I–VI, calcularea riscului UV și selecția protocoalelor foto-sensibile sigure.",
+    badge: "Client",
+    color: "#e8873a",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+        <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    )
+  },
+  {
+    slug: "lifestyle-insight",
+    title: "Lifestyle Insight",
+    body: "44 de întrebări structurate pe 5 secțiuni — alimentație, somn, stres, mișcare, hidratare — care evaluează impactul stilului de viață asupra sănătății tenului și generează un scor de risc pe fiecare arie.",
+    badge: "Client",
+    color: "#5aaa7a",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+        <path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10z" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M8 12s1.5 2 4 2 4-2 4-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M9 9h.01M15 9h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    )
+  },
+  {
+    slug: "dermatitis-screening",
+    title: "Screening Dermatită",
+    body: "36 de întrebări în 6 secțiuni pentru evaluarea simptomelor de dermatită — prurit, eritem, descuamare, edem, excoriații, lichenificare — cu scor de severitate și protocol recomandat.",
+    badge: "Client",
+    color: "#7b9fd4",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+        <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" strokeWidth="1.5"/>
+      </svg>
+    )
+  },
+  {
+    slug: "psoriasis-screening",
+    title: "Screening Psoriazis",
+    body: "40 de întrebări în 5 secțiuni — simptome cutanate, distribuție, manifestări unghiale și articulare, calitatea vieții, factori de risc — cu scor de severitate și criterii clare de escaladare medicală.",
+    badge: "Client",
+    color: "#c97bb2",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" width="22" height="22">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
+  }
+];
+
 const faqs = [
   {
     q: "Ce este Insight Beauty?",
-    a: "Insight Beauty este o platformă SaaS multi-tenant specializată pentru saloane premium, skin studios și cabinete de dermatocosmettologie. Oferă intake clinic digital, analiză automată a tipului de piele Baumann, dosar evolutiv al clientului și plan de tratament integrat — totul într-un singur sistem."
+    a: "Insight Beauty este o platformă SaaS multi-tenant specializată pentru saloane premium, skin studios și cabinete de dermatocosmetologie. Include un kit complet de consultație cu 5 chestionare clinice validate, analiză automată Baumann, dosar evolutiv al clientului și plan de tratament integrat."
   },
   {
-    q: "Cum funcționează intake-ul clinic digital?",
-    a: "Profesionistul generează un link personalizat pe care îl trimite clientului înaintea programării. Clientul completează chestionarul (2–3 minute) de pe orice dispozitiv. Răspunsurile sunt procesate automat, generând un profil de piele complet cu interpretare Baumann și recomandări de tratament."
+    q: "Ce chestionare sunt incluse în kit-ul de consultație?",
+    a: "Kit-ul include 5 chestionare clinice: Profilare Baumann (16 tipuri, evaluare profesională), Fototip Fitzpatrick (risc UV, 8 întrebări), Lifestyle Insight (44 întrebări pe 5 arii: alimentație, somn, stres, mișcare, hidratare), Screening Dermatită (36 întrebări, 6 secțiuni) și Screening Psoriazis (40 întrebări, 5 secțiuni cu criterii de escaladare medicală)."
   },
   {
     q: "Ce este analiza tip Baumann și cum o face Insight Beauty?",
-    a: "Sistemul Baumann clasifică pielea pe 4 dimensiuni: uscat/gras, sensibil/rezistent, pigmentat/nepigmentat, riduri/ferm. Insight Beauty integrează un motor de interpretare bazat pe acest sistem, calculând automat tipul de piele și generând recomandări personalizate de tratament și homecare."
+    a: "Sistemul Baumann clasifică pielea pe 4 dimensiuni: Oily/Dry (sebum), Sensitive/Resistant (reactivitate), Pigmented/Non-pigmented (melanogeneză), Wrinkled/Tight (aging). Combinând cele 4 dimensiuni rezultă 16 tipologii distincte. Insight Beauty calculează automat tipul și generează recomandări personalizate de tratament și homecare."
+  },
+  {
+    q: "Cum funcționează intake-ul clinic digital?",
+    a: "Profesionistul trimite un link personalizat clientului înaintea programării. Clientul completează chestionarele selectate (2–5 minute, pe orice dispozitiv) fără cont. Răspunsurile sunt procesate automat, generând profilul de piele complet, scorurile pe fiecare chestionar și prioritățile de tratament — disponibile la prima ședință."
   },
   {
     q: "Datele clienților sunt în siguranță? Este platforma conformă GDPR?",
-    a: "Da. Fiecare salon operează într-un tenant izolat — datele unui salon nu sunt accesibile altor utilizatori ai platformei. Toate datele sunt criptate în tranzit și în repaus. Platforma este proiectată să respecte cerințele GDPR privind stocarea și procesarea datelor personale."
-  },
-  {
-    q: "Pot personaliza chestionarele pentru salonul meu?",
-    a: "Da. Administratorii de platformă pot crea și personaliza chestionare complete cu întrebări, opțiuni, ponderi și logică de interpretare. Fiecare salon poate folosi chestionare standard sau versiuni adaptate specificului serviciilor sale."
+    a: "Da. Fiecare salon operează într-un tenant izolat — datele unui salon nu sunt accesibile altor utilizatori. Toate datele sunt criptate în tranzit și în repaus. Platforma este proiectată să respecte cerințele GDPR privind stocarea și procesarea datelor personale sensibile."
   },
   {
     q: "Funcționează Insight Beauty pe mobil? Există o aplicație?",
@@ -266,7 +334,7 @@ const faqs = [
   },
   {
     q: "Cât de rapid poate fi configurat un salon pe platformă?",
-    a: "Configurarea unui salon nou durează mai puțin de 10 minute: creare cont, personalizare profil și primele chestionare active. Demonstrația gratuită include asistență pas cu pas pentru configurarea inițială."
+    a: "Configurarea unui salon nou durează mai puțin de 10 minute: creare cont, personalizare profil și primele chestionare active. Kit-ul de consultație standard este disponibil imediat — chestionarele Baumann, Fitzpatrick, Lifestyle, Dermatită și Psoriazis sunt preconfigurate și gata de utilizare."
   }
 ];
 
@@ -504,6 +572,40 @@ export default function HomePage() {
                       <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </Link>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ── KIT DE CONSULTAȚIE ───────────────────────────────────── */}
+        <section className="section-block kit-section" aria-labelledby="kit-title">
+          <header className="section-header-row centered" data-reveal>
+            <span className="eyebrow">Kit de consultație</span>
+            <h2 id="kit-title">5 chestionare clinice. Un singur flux de intake.</h2>
+            <p className="section-lead centered-lead">
+              De la fototip la stilul de viață, fiecare client este evaluat complet înainte de prima ședință.
+              Scorurile sunt interpretate automat — fără calcule manuale, fără pierderi de informație.
+            </p>
+          </header>
+
+          <div className="card-grid kit-grid">
+            {questionnaires.map((q, i) => (
+              <article
+                key={q.slug}
+                className="kit-card"
+                data-reveal
+                data-delay={i}
+              >
+                <div className="kit-card-icon" style={{ color: q.color }} aria-hidden="true">
+                  {q.icon}
+                </div>
+                <div className="kit-card-body">
+                  <span className="kit-badge" style={{ backgroundColor: q.color + "22", color: q.color }}>
+                    {q.badge}
+                  </span>
+                  <h3 className="kit-card-title">{q.title}</h3>
+                  <p className="kit-card-desc">{q.body}</p>
                 </div>
               </article>
             ))}
