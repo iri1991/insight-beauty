@@ -82,41 +82,109 @@ select {
 .topbar {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 1.4rem 1.2rem 0.6rem;
+  padding: 1.5rem 1.2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 2rem;
   position: relative;
-  z-index: 3;
+  z-index: 10;
 }
 
 .brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-mark-symbol {
+  font-size: 1rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.brand-mark-name {
   font-family: var(--font-display);
-  font-size: 1.3rem;
-  letter-spacing: 0.04em;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 .topnav {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .topnav a {
-  padding: 0.75rem 1rem;
-  border-radius: 999px;
-  border: 1px solid rgba(72, 48, 39, 0.1);
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(18px);
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
   color: var(--muted);
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .topnav a:hover {
-  transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(72, 48, 39, 0.06);
   color: var(--text);
+}
+
+.topnav-accent {
+  background: var(--accent) !important;
+  color: #fff !important;
+  font-weight: 600;
+  padding: 0.45rem 1rem !important;
+}
+
+.topnav-accent:hover {
+  background: var(--accent-deep) !important;
+}
+
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.4rem 0.4rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(12px);
+}
+
+.user-chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1.2;
+}
+
+.user-chip-info strong {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.user-chip-info span {
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.logout-button {
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.78rem !important;
+  border-radius: 999px !important;
 }
 
 .page-frame {
