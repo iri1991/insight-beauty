@@ -315,11 +315,6 @@ export default function LandingPage() {
             <strong>&lt; 3 min</strong>
             <span>timp mediu evaluare</span>
           </div>
-          <div className="lp-hero-num-div" aria-hidden="true" />
-          <div className="lp-hero-num">
-            <strong>PWA</strong>
-            <span>instalabil, fără App Store</span>
-          </div>
         </div>
       </section>
 
