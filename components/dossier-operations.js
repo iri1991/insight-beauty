@@ -92,7 +92,7 @@ export function DossierOperations({
           setFeedback("Planul de tratament a fost salvat.");
           router.refresh();
         } catch (requestError) {
-          setError("Salvarea a esuat. Verifica ruta API si conexiunea la baza de date.");
+          setError("Salvarea a eșuat. Verifică conexiunea și încearcă din nou.");
         }
       })();
     });
@@ -124,7 +124,7 @@ export function DossierOperations({
           const payload = await response.json();
 
           if (!response.ok) {
-            setError(payload.error || "Nu am putut adauga sedinta.");
+            setError(payload.error || "Nu am putut adăuga ședința.");
             return;
           }
 
@@ -134,10 +134,10 @@ export function DossierOperations({
           setSessionStatus("scheduled");
           setSessionNotes("");
           setSessionOutcome("");
-          setFeedback("Sedinta a fost adaugata in istoric.");
+          setFeedback("Ședința a fost adăugată în istoric.");
           router.refresh();
         } catch (requestError) {
-          setError("Adaugarea sedintei a esuat. Verifica ruta API si conexiunea la baza de date.");
+          setError("Adăugarea ședinței a eșuat. Verifică conexiunea și încearcă din nou.");
         }
       })();
     });
@@ -147,8 +147,8 @@ export function DossierOperations({
     <div className="card-grid two-up">
       <article className="detail-card stack">
         <div>
-          <span className="eyebrow">Plan operations</span>
-          <h3>Actualizeaza planul de tratament</h3>
+          <span className="eyebrow">Plan de îngrijire</span>
+          <h3>Actualizează planul de tratament</h3>
         </div>
 
         <label className="field">
@@ -156,38 +156,47 @@ export function DossierOperations({
           <textarea rows={3} value={planSummary} onChange={(event) => setPlanSummary(event.target.value)} />
         </label>
 
-        <div className="field-grid compact-grid">
+        <div className="field-grid">
           <label className="field">
-            <span>Status</span>
+            <span>Status plan</span>
             <select value={planStatus} onChange={(event) => setPlanStatus(event.target.value)}>
-              <option value="draft">draft</option>
-              <option value="pending-debrief">pending-debrief</option>
-              <option value="active">active</option>
-              <option value="paused">paused</option>
-              <option value="completed">completed</option>
+              <option value="draft">Draft</option>
+              <option value="pending-debrief">Necesită debriefing</option>
+              <option value="active">Activ</option>
+              <option value="paused">În pauză</option>
+              <option value="completed">Finalizat</option>
             </select>
           </label>
           <label className="field">
-            <span>Cadenta</span>
-            <input value={cadence} onChange={(event) => setCadence(event.target.value)} placeholder="1 sedinta la 2 saptamani" />
+            <span>Cadență ședințe</span>
+            <input
+              value={cadence}
+              onChange={(event) => setCadence(event.target.value)}
+              placeholder="ex. 1 ședință la 2 săptămâni"
+            />
           </label>
           <label className="field">
-            <span>Review cadence</span>
+            <span>Cadență revizuire</span>
             <input
               value={reviewCadence}
               onChange={(event) => setReviewCadence(event.target.value)}
-              placeholder="review lunar"
+              placeholder="ex. revizuire lunară"
             />
           </label>
         </div>
 
         <label className="field">
           <span>Obiective</span>
-          <textarea rows={4} value={goals} onChange={(event) => setGoals(event.target.value)} placeholder="un obiectiv pe linie" />
+          <textarea
+            rows={4}
+            value={goals}
+            onChange={(event) => setGoals(event.target.value)}
+            placeholder="un obiectiv pe linie"
+          />
         </label>
 
         <label className="field">
-          <span>Protocoale in cabinet</span>
+          <span>Protocoale în cabinet</span>
           <textarea
             rows={4}
             value={inCabinProtocols}
@@ -197,26 +206,35 @@ export function DossierOperations({
         </label>
 
         <label className="field">
-          <span>Homecare</span>
-          <textarea rows={4} value={homecare} onChange={(event) => setHomecare(event.target.value)} placeholder="un pas pe linie" />
+          <span>Rutină acasă</span>
+          <textarea
+            rows={4}
+            value={homecare}
+            onChange={(event) => setHomecare(event.target.value)}
+            placeholder="un pas pe linie"
+          />
         </label>
 
-        <div className="field-grid compact-grid">
+        <div className="field-grid">
           <label className="field">
-            <span>Trend</span>
+            <span>Tendință</span>
             <select value={trend} onChange={(event) => setTrend(event.target.value)}>
-              <option value="baseline">baseline</option>
-              <option value="upward">upward</option>
-              <option value="stable">stable</option>
-              <option value="downward">downward</option>
+              <option value="baseline">Baseline</option>
+              <option value="upward">În îmbunătățire</option>
+              <option value="stable">Stabil</option>
+              <option value="downward">În regresie</option>
             </select>
           </label>
           <label className="field">
-            <span>Focus</span>
-            <input value={focus} onChange={(event) => setFocus(event.target.value)} placeholder="barrier reset" />
+            <span>Focus actual</span>
+            <input
+              value={focus}
+              onChange={(event) => setFocus(event.target.value)}
+              placeholder="ex. refacere barieră cutanată"
+            />
           </label>
           <label className="field">
-            <span>Next session</span>
+            <span>Următoarea ședință</span>
             <input
               type="datetime-local"
               value={nextSessionDate}
@@ -226,22 +244,22 @@ export function DossierOperations({
         </div>
 
         <label className="field">
-          <span>Baseline</span>
+          <span>Stare inițială (baseline)</span>
           <textarea rows={3} value={baseline} onChange={(event) => setBaseline(event.target.value)} />
         </label>
 
         <label className="field">
-          <span>Status curent</span>
+          <span>Stare curentă</span>
           <textarea rows={3} value={current} onChange={(event) => setCurrent(event.target.value)} />
         </label>
 
-        <div className="field-grid compact-grid">
+        <div className="field-grid">
           <label className="field">
-            <span>Preocupari principale</span>
+            <span>Preocupări principale</span>
             <textarea rows={4} value={concerns} onChange={(event) => setConcerns(event.target.value)} />
           </label>
           <label className="field">
-            <span>Risk flags</span>
+            <span>Semnale de risc</span>
             <textarea rows={4} value={flags} onChange={(event) => setFlags(event.target.value)} />
           </label>
         </div>
@@ -251,48 +269,56 @@ export function DossierOperations({
 
         <div className="button-row">
           <button className="button primary" type="button" disabled={isPending} onClick={handleSavePlan}>
-            {isPending ? "Salvare..." : "Salveaza planul"}
+            {isPending ? "Se salvează…" : "Salvează planul"}
           </button>
         </div>
       </article>
 
       <article className="detail-card stack">
         <div>
-          <span className="eyebrow">Session logging</span>
-          <h3>Adauga o sedinta sau un follow-up</h3>
+          <span className="eyebrow">Jurnal ședințe</span>
+          <h3>Adaugă o ședință sau un follow-up</h3>
         </div>
 
-        <div className="field-grid compact-grid">
+        <div className="field-grid">
           <label className="field">
-            <span>Data</span>
+            <span>Dată</span>
             <input type="date" value={sessionDate} onChange={(event) => setSessionDate(event.target.value)} />
           </label>
           <label className="field">
             <span>Serviciu</span>
-            <input value={sessionService} onChange={(event) => setSessionService(event.target.value)} placeholder="LED calmare" />
+            <input
+              value={sessionService}
+              onChange={(event) => setSessionService(event.target.value)}
+              placeholder="ex. LED calmare"
+            />
           </label>
           <label className="field">
             <span>Status</span>
             <select value={sessionStatus} onChange={(event) => setSessionStatus(event.target.value)}>
-              <option value="scheduled">scheduled</option>
-              <option value="completed">completed</option>
-              <option value="cancelled">cancelled</option>
+              <option value="scheduled">Programată</option>
+              <option value="completed">Finalizată</option>
+              <option value="cancelled">Anulată</option>
             </select>
           </label>
         </div>
 
         <label className="field">
           <span>Obiectiv</span>
-          <input value={sessionObjective} onChange={(event) => setSessionObjective(event.target.value)} placeholder="reducere inflamatie" />
+          <input
+            value={sessionObjective}
+            onChange={(event) => setSessionObjective(event.target.value)}
+            placeholder="ex. reducere inflamație"
+          />
         </label>
 
         <label className="field">
-          <span>Note</span>
+          <span>Note de ședință</span>
           <textarea rows={4} value={sessionNotes} onChange={(event) => setSessionNotes(event.target.value)} />
         </label>
 
         <label className="field">
-          <span>Outcome</span>
+          <span>Rezultat</span>
           <textarea rows={3} value={sessionOutcome} onChange={(event) => setSessionOutcome(event.target.value)} />
         </label>
 
@@ -300,8 +326,8 @@ export function DossierOperations({
         {feedback ? <p className="inline-success">{feedback}</p> : null}
 
         <div className="button-row">
-          <button className="button secondary" type="button" disabled={isPending} onClick={handleAppendSession}>
-            {isPending ? "Adaugare..." : "Adauga sedinta"}
+          <button className="button primary" type="button" disabled={isPending} onClick={handleAppendSession}>
+            {isPending ? "Se adaugă…" : "Adaugă ședința"}
           </button>
         </div>
       </article>

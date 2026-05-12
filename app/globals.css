@@ -663,6 +663,98 @@ select {
   flex: 1;
 }
 
+/* Label-wrapped form fields used across the app */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.field > span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+  line-height: 1.5;
+}
+
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'><path d='M3 4.5L6 7.5L9 4.5' stroke='%23665550' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 12px;
+  padding-right: 2rem;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: rgba(199, 100, 71, 0.45);
+  box-shadow: 0 0 0 3px rgba(199, 100, 71, 0.1);
+  background: #fff;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: rgba(102, 85, 80, 0.45);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.compact-grid {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.inline-error,
+.inline-success {
+  font-size: 0.85rem;
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.9rem;
+  margin: 0;
+}
+
+.inline-error {
+  color: #a23d22;
+  background: #fdf0ec;
+  border: 1px solid #f0d0c4;
+}
+
+.inline-success {
+  color: #2d6050;
+  background: #edf5f2;
+  border: 1px solid #c8e0d4;
+}
+
 .form-error {
   font-size: 0.85rem;
   color: #a23d22;
