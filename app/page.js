@@ -58,8 +58,8 @@ const BAUMANN_TYPES = [
 ];
 
 function BaumannMatrix() {
-  const size = 64;
-  const gap = 4;
+  const size = 68;
+  const gap = 5;
   const cols = 4;
   const rows = 4;
   const total = cols * (size + gap) - gap;
@@ -79,6 +79,9 @@ function BaumannMatrix() {
             <stop offset="100%" stopColor={t.g2} />
           </linearGradient>
         ))}
+        <filter id="cell-shadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(60,30,20,0.18)" />
+        </filter>
       </defs>
 
       {BAUMANN_TYPES.map((t, i) => {
@@ -87,82 +90,85 @@ function BaumannMatrix() {
         const x = col * (size + gap);
         const y = row * (size + gap);
         return (
-          <g key={t.code}>
-            <rect x={x} y={y} width={size} height={size} rx="6" fill={`url(#bg${i})`} opacity="0.92" />
+          <g key={t.code} filter="url(#cell-shadow)">
+            <rect x={x} y={y} width={size} height={size} rx="10" fill={`url(#bg${i})`} />
             <text
               x={x + size / 2}
               y={y + size / 2 + 5}
               textAnchor="middle"
-              fontSize="11"
+              fontSize="10.5"
               fontWeight="700"
               fontFamily="'Avenir Next', 'Segoe UI', sans-serif"
-              letterSpacing="0.05em"
-              fill="rgba(255,255,255,0.9)"
+              letterSpacing="0.06em"
+              fill="rgba(255,255,255,0.92)"
             >
               {t.code}
             </text>
           </g>
         );
       })}
-
-      {/* Axis labels */}
-      <text x={total / 2} y={total + 18} textAnchor="middle" fontSize="9" fontFamily="sans-serif" fill="rgba(255,255,255,0.35)" letterSpacing="0.1em">
-        USCAT ←→ GRAS
-      </text>
     </svg>
   );
 }
 
-// ─── Dimension cross visual ───────────────────────────────────────────────────
+// ─── Skin dimension spectrum visual ──────────────────────────────────────────
 
-function DimensionCross() {
+function SkinSpectrum() {
+  const dims = [
+    {
+      code: "O / D",
+      a: "Oily",
+      b: "Dry",
+      desc: "Producția de sebum",
+      from: "#c87858",
+      to: "#ead4c0"
+    },
+    {
+      code: "S / R",
+      a: "Sensitive",
+      b: "Resistant",
+      desc: "Reactivitate cutanată",
+      from: "#d4807a",
+      to: "#c4b8b0"
+    },
+    {
+      code: "P / N",
+      a: "Pigmented",
+      b: "Non-pigmented",
+      desc: "Melanogeneză",
+      from: "#8a5038",
+      to: "#f2e8e0"
+    },
+    {
+      code: "W / T",
+      a: "Wrinkled",
+      b: "Tight",
+      desc: "Aging cutanat",
+      from: "#c0a488",
+      to: "#ddd0c4"
+    }
+  ];
+
   return (
-    <svg viewBox="0 0 260 260" width="260" height="260" aria-label="Cele 4 dimensiuni Baumann" className="lp-dim-cross">
-      <defs>
-        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#c76447" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#c76447" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-
-      <circle cx="130" cy="130" r="100" fill="url(#glow)" />
-      <circle cx="130" cy="130" r="90" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <circle cx="130" cy="130" r="60" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <circle cx="130" cy="130" r="30" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-
-      {/* Axes */}
-      <line x1="130" y1="18" x2="130" y2="242" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-      <line x1="18" y1="130" x2="242" y2="130" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-      <line x1="49" y1="49" x2="211" y2="211" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <line x1="211" y1="49" x2="49" y2="211" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-
-      {/* Center dot */}
-      <circle cx="130" cy="130" r="5" fill="#c76447" />
-
-      {/* Axis endpoint dots */}
-      <circle cx="130" cy="30" r="4" fill="rgba(199,100,71,0.7)" />
-      <circle cx="130" cy="230" r="4" fill="rgba(199,100,71,0.7)" />
-      <circle cx="30" cy="130" r="4" fill="rgba(199,100,71,0.7)" />
-      <circle cx="230" cy="130" r="4" fill="rgba(199,100,71,0.7)" />
-
-      {/* Labels */}
-      <text x="130" y="14" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="600" fill="rgba(255,255,255,0.6)" letterSpacing="0.08em">OILY</text>
-      <text x="130" y="250" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="600" fill="rgba(255,255,255,0.6)" letterSpacing="0.08em">DRY</text>
-      <text x="14" y="133" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="600" fill="rgba(255,255,255,0.6)" letterSpacing="0.08em">S</text>
-      <text x="246" y="133" textAnchor="middle" fontSize="9" fontFamily="sans-serif" fontWeight="600" fill="rgba(255,255,255,0.6)" letterSpacing="0.08em">R</text>
-
-      {/* Dimension names around the circle */}
-      <text x="130" y="115" textAnchor="middle" fontSize="10" fontFamily="'Iowan Old Style', serif" fontStyle="italic" fill="rgba(255,255,255,0.5)">Sebum</text>
-      <text x="130" y="148" textAnchor="middle" fontSize="10" fontFamily="'Iowan Old Style', serif" fontStyle="italic" fill="rgba(255,255,255,0.5)">Hidratare</text>
-      <text x="75" y="131" textAnchor="middle" fontSize="10" fontFamily="'Iowan Old Style', serif" fontStyle="italic" fill="rgba(255,255,255,0.5)">Sens.</text>
-      <text x="185" y="131" textAnchor="middle" fontSize="10" fontFamily="'Iowan Old Style', serif" fontStyle="italic" fill="rgba(255,255,255,0.5)">Rez.</text>
-
-      {/* P/N and W/T axes */}
-      <text x="59" y="56" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill="rgba(255,255,255,0.3)" letterSpacing="0.06em">P</text>
-      <text x="201" y="208" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill="rgba(255,255,255,0.3)" letterSpacing="0.06em">N</text>
-      <text x="201" y="56" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill="rgba(255,255,255,0.3)" letterSpacing="0.06em">W</text>
-      <text x="59" y="208" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill="rgba(255,255,255,0.3)" letterSpacing="0.06em">T</text>
-    </svg>
+    <div className="lp-spectrum">
+      {dims.map((d) => (
+        <div key={d.code} className="lp-spectrum-dim">
+          <div className="lp-spectrum-meta">
+            <span className="lp-spectrum-code">{d.code}</span>
+            <span className="lp-spectrum-desc">{d.desc}</span>
+          </div>
+          <div className="lp-spectrum-row">
+            <span className="lp-spectrum-pole">{d.a}</span>
+            <div
+              className="lp-spectrum-track"
+              style={{ background: `linear-gradient(90deg, ${d.from}, ${d.to})` }}
+              aria-hidden="true"
+            />
+            <span className="lp-spectrum-pole">{d.b}</span>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -286,13 +292,10 @@ export default function LandingPage() {
           </div>
 
           <div className="lp-hero-visual" aria-hidden="true">
-            <div className="lp-matrix-wrap">
-              <div className="lp-matrix-labels">
-                <span className="lp-matrix-label-v">OILY → DRY</span>
-                <span className="lp-matrix-label-h">SENSITIVE → RESISTANT</span>
-              </div>
+            <div className="lp-matrix-card">
+              <p className="lp-matrix-card-eyebrow">16 tipologii Baumann</p>
               <BaumannMatrix />
-              <p className="lp-matrix-caption">16 tipologii Baumann — cartografiate automat</p>
+              <p className="lp-matrix-caption">cartografiate automat prin evaluare clinică</p>
             </div>
           </div>
         </div>
@@ -380,36 +383,15 @@ export default function LandingPage() {
       {/* ── BAUMANN SYSTEM ───────────────────────────────────────────── */}
       <section className="lp-baumann-section" aria-labelledby="baumann-h2">
         <div className="lp-baumann-inner">
-          <div className="lp-baumann-visual" aria-hidden="true" data-reveal>
-            <DimensionCross />
-            <div className="lp-baumann-dims-legend">
-              {[
-                { code: "O/D", name: "Sebum" },
-                { code: "S/R", name: "Reactivitate" },
-                { code: "P/N", name: "Melanogeneză" },
-                { code: "W/T", name: "Aging" }
-              ].map((d) => (
-                <div key={d.code} className="lp-dim-item">
-                  <span className="lp-dim-code">{d.code}</span>
-                  <span className="lp-dim-name">{d.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="lp-baumann-text" data-reveal data-delay="1">
-            <span className="lp-section-kicker lp-kicker-light">Sistemul Baumann</span>
-            <h2 id="baumann-h2" className="lp-section-title lp-title-light">
+          <div className="lp-baumann-text" data-reveal>
+            <span className="lp-section-kicker">Sistemul Baumann</span>
+            <h2 id="baumann-h2" className="lp-section-title">
               4 dimensiuni.<br />
               <em>16 tipologii distincte.</em>
             </h2>
-            <p className="lp-section-lead lp-lead-light">
-              Fiecare piele este o combinație unică pe 4 axe: Oily/Dry (sebum), Sensitive/Resistant (reactivitate),
-              Pigmented/Non-pigmented (melanogeneză), Wrinkled/Tight (aging).
-            </p>
-            <p className="lp-section-lead lp-lead-light" style={{ marginTop: "1rem" }}>
-              Insight Beauty calculează automat combinația celor 4 dimensiuni, identifică tipologia dintre cele 16 posibile
-              și generează recomandări de tratament și homecare personalizate.
+            <p className="lp-section-lead">
+              Fiecare piele este o combinație unică pe 4 axe. Insight Beauty calculează automat
+              tipologia și generează recomandări de tratament și homecare personalizate.
             </p>
             <div className="lp-baumann-types-row" aria-label="Exemple de tipologii Baumann">
               {["OSPT", "DRNT", "ORPW", "DSPW"].map((t) => (
@@ -417,6 +399,10 @@ export default function LandingPage() {
               ))}
               <span className="lp-type-chip-more">+12</span>
             </div>
+          </div>
+
+          <div className="lp-baumann-visual" data-reveal data-delay="1">
+            <SkinSpectrum />
           </div>
         </div>
       </section>
@@ -510,7 +496,7 @@ export default function LandingPage() {
             <span className="lp-section-kicker lp-kicker-light">Demonstrație gratuită</span>
             <h2 id="cta-h2" className="lp-section-title lp-title-light">
               Configurare în<br />
-              <em>mai puțin de 10 minute.</em>
+              <em className="lp-cta-em">mai puțin de 10 minute.</em>
             </h2>
             <p className="lp-lead-light" style={{ marginTop: "1rem", fontSize: "1rem" }}>
               Fără card de credit. Fără angajament. Primești acces complet la platformă și asistență pentru

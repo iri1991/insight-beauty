@@ -1725,8 +1725,8 @@ select {
 /* Hero */
 .lp-hero {
   margin: 0;
-  background: #100d09;
-  color: #fff;
+  background: #faf5ef;
+  color: var(--text);
   padding: 0 1.2rem;
   position: relative;
   overflow: hidden;
@@ -1737,8 +1737,8 @@ select {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 80% 30%, rgba(199,100,71,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 10% 70%, rgba(90,154,114,0.07) 0%, transparent 70%);
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(199,100,71,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 5% 80%, rgba(90,154,114,0.05) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -1773,7 +1773,7 @@ select {
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.03em;
-  color: #fff;
+  color: var(--text);
   margin: 0;
 }
 
@@ -1785,7 +1785,7 @@ select {
 .lp-lead {
   font-size: 1.05rem;
   line-height: 1.65;
-  color: rgba(255,255,255,0.6);
+  color: var(--muted);
   max-width: 48ch;
   margin: 0;
 }
@@ -1819,48 +1819,45 @@ select {
   display: inline-flex;
   align-items: center;
   padding: 0.85rem 1.5rem;
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(72,48,39,0.2);
   border-radius: 10px;
-  color: rgba(255,255,255,0.7);
+  color: var(--muted);
   font-size: 0.9rem;
   transition: border-color 0.2s, color 0.2s;
 }
 
 .lp-btn-ghost:hover {
-  border-color: rgba(255,255,255,0.4);
-  color: #fff;
+  border-color: rgba(72,48,39,0.4);
+  color: var(--text);
 }
 
-/* Baumann matrix */
+/* Baumann matrix card */
 .lp-hero-visual {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.lp-matrix-wrap {
-  display: flex;
+.lp-matrix-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 28px 80px rgba(94,52,37,0.1), 0 4px 16px rgba(94,52,37,0.05);
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  position: relative;
+  gap: 1rem;
 }
 
-.lp-matrix-labels {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  align-self: flex-start;
-  padding-left: 0.5rem;
-}
-
-.lp-matrix-label-v,
-.lp-matrix-label-h {
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+.lp-matrix-card-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.25);
+  color: var(--muted);
+  opacity: 0.6;
+  text-align: center;
+  margin: 0;
 }
 
 .lp-baumann-svg {
@@ -1869,10 +1866,12 @@ select {
 }
 
 .lp-matrix-caption {
-  font-size: 0.72rem;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.06em;
+  font-size: 0.7rem;
+  color: var(--muted);
+  opacity: 0.5;
+  letter-spacing: 0.04em;
   text-align: center;
+  font-style: italic;
   margin: 0;
 }
 
@@ -1880,7 +1879,7 @@ select {
 .lp-hero-numbers {
   max-width: 1240px;
   margin: 0 auto;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: 1px solid var(--line);
   display: flex;
   align-items: center;
   padding: 2rem 0;
@@ -1899,27 +1898,28 @@ select {
   font-size: clamp(1.5rem, 2.5vw, 2.2rem);
   font-family: var(--font-display);
   font-weight: 400;
-  color: #fff;
+  color: var(--text);
   letter-spacing: -0.02em;
 }
 
 .lp-hero-num span {
   font-size: 0.75rem;
-  color: rgba(255,255,255,0.4);
+  color: var(--muted);
+  opacity: 0.65;
   letter-spacing: 0.04em;
 }
 
 .lp-hero-num-div {
   width: 1px;
   height: 2.5rem;
-  background: rgba(255,255,255,0.08);
+  background: var(--line);
   flex-shrink: 0;
 }
 
 /* Manifesto */
 .lp-manifesto {
   margin: 0;
-  background: var(--accent);
+  background: #231815;
   padding: 5rem 1.2rem;
 }
 
@@ -1968,7 +1968,7 @@ select {
 }
 
 .lp-kicker-light {
-  color: rgba(199,100,71,0.8);
+  color: rgba(255,255,255,0.7);
 }
 
 .lp-section-title {
@@ -2119,18 +2119,10 @@ select {
 /* Baumann section */
 .lp-baumann-section {
   margin: 0;
-  background: #0f0c09;
+  background: #f5ede6;
   padding: 6rem 1.2rem;
   position: relative;
   overflow: hidden;
-}
-
-.lp-baumann-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 50% 60% at 25% 50%, rgba(199,100,71,0.08) 0%, transparent 70%);
-  pointer-events: none;
 }
 
 .lp-baumann-inner {
@@ -2140,48 +2132,17 @@ select {
   grid-template-columns: 1fr 1fr;
   gap: 6rem;
   align-items: center;
-  position: relative;
-}
-
-.lp-baumann-visual {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.lp-dim-cross {
-  display: block;
-  opacity: 0.9;
-}
-
-.lp-baumann-dims-legend {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem 2rem;
-}
-
-.lp-dim-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.lp-dim-code {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-}
-
-.lp-dim-name {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.45);
 }
 
 .lp-baumann-text {
   display: flex;
   flex-direction: column;
+}
+
+.lp-baumann-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .lp-baumann-types-row {
@@ -2196,9 +2157,9 @@ select {
   font-weight: 700;
   letter-spacing: 0.08em;
   padding: 0.35em 0.8em;
-  border: 1px solid rgba(199,100,71,0.35);
+  border: 1px solid rgba(199,100,71,0.3);
   border-radius: 6px;
-  color: rgba(199,100,71,0.8);
+  color: var(--accent);
   background: rgba(199,100,71,0.06);
 }
 
@@ -2206,9 +2167,66 @@ select {
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.35em 0.8em;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--line);
   border-radius: 6px;
-  color: rgba(255,255,255,0.3);
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+/* Skin dimension spectrum bars */
+.lp-spectrum {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.lp-spectrum-dim {}
+
+.lp-spectrum-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.55rem;
+}
+
+.lp-spectrum-code {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.lp-spectrum-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.lp-spectrum-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lp-spectrum-pole {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  opacity: 0.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 7ch;
+}
+
+.lp-spectrum-pole:last-child {
+  text-align: right;
+}
+
+.lp-spectrum-track {
+  flex: 1;
+  height: 22px;
+  border-radius: 999px;
+  box-shadow: inset 0 1px 4px rgba(60,30,20,0.12);
 }
 
 /* Flow / how it works */
@@ -2351,7 +2369,7 @@ select {
 /* CTA */
 .lp-cta {
   margin: 0;
-  background: #100d09;
+  background: var(--accent);
   padding: 6rem 1.2rem;
   position: relative;
   overflow: hidden;
@@ -2361,8 +2379,15 @@ select {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 70% at 15% 50%, rgba(199,100,71,0.1) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 60% 70% at 15% 50%, rgba(255,255,255,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 90% 80%, rgba(147,67,41,0.35) 0%, transparent 70%);
   pointer-events: none;
+}
+
+.lp-cta-em {
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
 }
 
 .lp-cta-inner {
@@ -2389,8 +2414,8 @@ select {
 /* Footer */
 .lp-footer {
   margin: 0;
-  background: #0a0806;
-  border-top: 1px solid rgba(255,255,255,0.05);
+  background: #1e0e08;
+  border-top: 1px solid rgba(255,255,255,0.06);
   padding: 4rem 1.2rem 3rem;
 }
 
