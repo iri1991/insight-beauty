@@ -13,19 +13,13 @@ const KIND_LABELS = {
 const STATUS_LABELS = {
   active: "Activ",
   draft: "Draft",
-  archived: "Arhivat",
-  "mapped-source": "Mapat",
-  "awaiting-question-bank": "În așteptare",
-  "source-indexed": "Indexat"
+  archived: "Arhivat"
 };
 
 const STATUS_COLORS = {
-  active: "tag-success",
-  draft: "tag-draft",
-  archived: "tag",
-  "mapped-source": "tag tag-soft",
-  "awaiting-question-bank": "tag tag-warn",
-  "source-indexed": "tag tag-soft"
+  active: "tag tag-success",
+  draft: "tag tag-draft",
+  archived: "tag tag-soft"
 };
 
 const DELIVERY_LABELS = {

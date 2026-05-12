@@ -5,15 +5,11 @@ import { AdminCreateUserForm } from "../../components/admin-create-user-form";
 import { canAccessAdmin, isDatabaseConfigured, requireUser } from "../../lib/auth";
 import { listQuestionnaireCatalog } from "../../lib/questionnaire-engine";
 import { getAdminSnapshot, listClientsForSalon, listProfessionalsForSalon, listSalons } from "../../lib/repositories";
-import { getSourceDocuments, getSourceStats } from "../../lib/source-library";
 
 const STATUS_LABELS = {
   active: "Activ",
   draft: "Draft",
-  archived: "Arhivat",
-  "mapped-source": "Mapat",
-  "awaiting-question-bank": "În așteptare",
-  "source-indexed": "Indexat"
+  archived: "Arhivat"
 };
 
 export default async function AdminPage() {
@@ -33,8 +29,6 @@ export default async function AdminPage() {
   }
 
   const questionnaireCatalog = listQuestionnaireCatalog();
-  const sourceStats = getSourceStats();
-  const sourceDocuments = getSourceDocuments().slice(0, 8);
   const adminSnapshot = await getAdminSnapshot();
   const salons = await listSalons();
   const salonCards = await Promise.all(
@@ -70,8 +64,8 @@ export default async function AdminPage() {
             <strong>{adminSnapshot.activeClients}</strong>
           </article>
           <article className="metric-card">
-            <span>Documente sursă</span>
-            <strong>{sourceStats.total || adminSnapshot.sourceDocumentsIndexed}</strong>
+            <span>Chestionare active</span>
+            <strong>{questionnaireCatalog.filter((q) => q.status === "active").length}</strong>
           </article>
         </div>
       </section>
@@ -99,10 +93,6 @@ export default async function AdminPage() {
               <div className="metric-row">
                 <span>Public țintă</span>
                 <strong>{questionnaire.audience === "client" ? "Client" : questionnaire.audience === "professional" ? "Profesionist" : questionnaire.audience}</strong>
-              </div>
-              <div className="metric-row">
-                <span>Acoperire</span>
-                <strong>{questionnaire.sourceCoverage === "full" ? "Completă" : questionnaire.sourceCoverage}</strong>
               </div>
               <Link className="text-link" href={`/admin/questionnaires/${questionnaire.slug}`}>
                 Editează →
@@ -193,25 +183,6 @@ export default async function AdminPage() {
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-heading">
-          <div>
-            <span className="eyebrow">Documente sursă</span>
-            <h2>Biblioteca de materiale clinice indexate</h2>
-          </div>
-        </div>
-        <div className="card-grid two-up">
-          {sourceDocuments.map((document) => (
-            <article key={document.id} className="detail-card">
-              <div className="card-row">
-                <h3>{document.fileName}</h3>
-                <span className="tag tag-soft">{document.kind}</span>
-              </div>
-              <p>{document.preview}</p>
-            </article>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

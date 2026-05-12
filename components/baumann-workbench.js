@@ -56,10 +56,9 @@ export function BaumannWorkbench({ tipologyCatalog = [] }) {
     <section className="section-block">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Professional tool</span>
-          <h2>Baumann 16-Type Workbench</h2>
+          <span className="eyebrow">Instrument profesionist</span>
+          <h2>Workbench Baumann — 16 tipologii</h2>
         </div>
-        <span className="tag tag-soft">source-backed scoring</span>
       </div>
 
       <div className="workspace-grid">
@@ -91,8 +90,8 @@ export function BaumannWorkbench({ tipologyCatalog = [] }) {
                   <h3>{dimension.label}</h3>
                   <span className="tag">{dimension.score}p</span>
                 </div>
-                <p>{dimension.band ? dimension.band.label : "Scor in afara baremului actual."}</p>
-                <p className="helper-copy">{dimension.band?.summary || "Introdu un scor din documentele profesionale."}</p>
+                <p>{dimension.band ? dimension.band.label : "Scor în afara baremului actual."}</p>
+                <p className="helper-copy">{dimension.band?.summary || "Introdu un scor valid pentru această dimensiune."}</p>
               </article>
             ))}
           </div>
@@ -106,12 +105,12 @@ export function BaumannWorkbench({ tipologyCatalog = [] }) {
                 <h3>Tipologie {evaluation.code}</h3>
                 <p className="lead-copy">
                   {evaluation.tipology?.preview ||
-                    "Tipologia compusa a fost rezolvata din cele patru dimensiuni si este gata pentru debriefing."}
+                    "Tipologia a fost calculată din cele patru dimensiuni și este gata pentru debriefing."}
                 </p>
               </div>
 
               <div className="detail-card">
-                <span className="eyebrow">Interpretare rapida</span>
+                <span className="eyebrow">Interpretare rapidă</span>
                 <p>
                   {evaluation.dimensions
                     .map((dimension) => `${dimension.label}: ${dimension.band.label}`)
@@ -120,10 +119,10 @@ export function BaumannWorkbench({ tipologyCatalog = [] }) {
               </div>
 
               <div className="detail-card">
-                <span className="eyebrow">Utilizare in cabinet</span>
+                <span className="eyebrow">Utilizare în cabinet</span>
                 <p>
-                  Foloseste acest rezultat ca baza pentru protocol, homecare si alegerea tratamentelor tolerate in
-                  urmatoarele 30-90 zile.
+                  Folosește acest rezultat ca bază pentru protocol, homecare și alegerea tratamentelor tolerate
+                  în următoarele 30–90 zile.
                 </p>
               </div>
             </div>
