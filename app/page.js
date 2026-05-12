@@ -292,6 +292,13 @@ export default function LandingPage() {
           </div>
 
           <div className="lp-hero-visual" aria-hidden="true">
+            <div className="lp-hero-decor" aria-hidden="true">
+              <span className="lp-bubble lp-bubble-1" />
+              <span className="lp-bubble lp-bubble-2" />
+              <span className="lp-bubble lp-bubble-3" />
+              <span className="lp-bubble lp-bubble-4" />
+              <span className="lp-bubble lp-bubble-5" />
+            </div>
             <div className="lp-matrix-card">
               <p className="lp-matrix-card-eyebrow">16 tipologii Baumann</p>
               <BaumannMatrix />
@@ -372,6 +379,92 @@ export default function LandingPage() {
               <div className="lp-kit-row-accent" style={{ background: item.color }} aria-hidden="true" />
             </article>
           ))}
+        </div>
+      </section>
+
+      {/* ── RITUALS / MOOD ──────────────────────────────────────────── */}
+      <section className="lp-rituals" aria-label="Ritualuri">
+        <div className="lp-rituals-inner">
+          <div className="lp-rituals-header" data-reveal>
+            <span className="lp-section-kicker">Ritualuri</span>
+            <h2 className="lp-section-title">
+              Fiecare client.<br />
+              <em>Propria călătorie.</em>
+            </h2>
+          </div>
+
+          <div className="lp-rituals-grid">
+            <article className="lp-ritual lp-ritual-glow" data-reveal data-delay="0">
+              <div className="lp-ritual-shape" aria-hidden="true">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                  <defs>
+                    <radialGradient id="rg-glow" cx="40%" cy="40%" r="60%">
+                      <stop offset="0%" stopColor="#fff" stopOpacity="0.65" />
+                      <stop offset="100%" stopColor="#fff" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="60" cy="60" r="48" fill="url(#rg-glow)" />
+                  <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.8" />
+                  <circle cx="60" cy="60" r="32" fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth="0.8" />
+                  <circle cx="60" cy="60" r="16" fill="none" stroke="rgba(255,255,255,0.25)" strokeWidth="0.8" />
+                </svg>
+              </div>
+              <span className="lp-ritual-word">Glow</span>
+              <h3>Profil personalizat</h3>
+              <p>Profilare Baumann completă, fototip Fitzpatrick și preocupări dermatologice — într-o singură sesiune de intake.</p>
+            </article>
+
+            <article className="lp-ritual lp-ritual-renew" data-reveal data-delay="1">
+              <div className="lp-ritual-shape" aria-hidden="true">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                  <path d="M60 18 C 78 32, 92 50, 92 70 C 92 88, 78 102, 60 102 C 42 102, 28 88, 28 70 C 28 50, 42 32, 60 18 Z"
+                    fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+                  <path d="M60 18 C 60 40, 60 80, 60 102" stroke="rgba(255,255,255,0.4)" strokeWidth="0.8" fill="none" />
+                  <circle cx="60" cy="44" r="3" fill="rgba(255,255,255,0.7)" />
+                  <circle cx="60" cy="74" r="3" fill="rgba(255,255,255,0.7)" />
+                </svg>
+              </div>
+              <span className="lp-ritual-word">Renew</span>
+              <h3>Plan de tratament evolutiv</h3>
+              <p>Obiective clinice, protocoale în cabinet și rutină acasă — toate aliniate la tipologia pielii și recalibrate periodic.</p>
+            </article>
+
+            <article className="lp-ritual lp-ritual-trust" data-reveal data-delay="2">
+              <div className="lp-ritual-shape" aria-hidden="true">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                  <path d="M60 22 L 92 36 L 92 64 C 92 82, 78 96, 60 102 C 42 96, 28 82, 28 64 L 28 36 Z"
+                    fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+                  <path d="M44 62 L 56 74 L 78 50" stroke="rgba(255,255,255,0.85)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <span className="lp-ritual-word">Trust</span>
+              <h3>Dosar evolutiv</h3>
+              <p>Fiecare ședință, fiecare evaluare, fiecare insight — păstrate în dosarul personal al clientului, accesibil între programări.</p>
+            </article>
+
+            <article className="lp-ritual lp-ritual-bloom" data-reveal data-delay="3">
+              <div className="lp-ritual-shape" aria-hidden="true">
+                <svg viewBox="0 0 120 120" width="120" height="120">
+                  {[0, 60, 120, 180, 240, 300].map((angle) => {
+                    const rad = (angle * Math.PI) / 180;
+                    const x = 60 + 28 * Math.cos(rad);
+                    const y = 60 + 28 * Math.sin(rad);
+                    return (
+                      <ellipse key={angle} cx={x} cy={y} rx="14" ry="22"
+                        fill="rgba(255,255,255,0.18)"
+                        stroke="rgba(255,255,255,0.45)"
+                        strokeWidth="0.8"
+                        transform={`rotate(${angle + 90} ${x} ${y})`} />
+                    );
+                  })}
+                  <circle cx="60" cy="60" r="10" fill="rgba(255,255,255,0.6)" />
+                </svg>
+              </div>
+              <span className="lp-ritual-word">Bloom</span>
+              <h3>Comunitate de saloane</h3>
+              <p>Saloane premium și skin studios construiesc împreună standardul de consultație clinică în industria de beauty din România.</p>
+            </article>
+          </div>
         </div>
       </section>
 
