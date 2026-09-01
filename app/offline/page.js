@@ -1,3 +1,5 @@
+"use client";
+
 export default function OfflinePage() {
   return (
     <div className="auth-page">
@@ -26,7 +28,7 @@ export default function OfflinePage() {
 
         <button
           className="button primary"
-          onClick="window.location.reload()"
+          onClick={() => window.location.reload()}
           style={{ width: "100%" }}
         >
           Încearcă din nou

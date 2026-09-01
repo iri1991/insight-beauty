@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { DemoForm } from "../components/demo-form";
 import { ScrollReveal } from "../components/scroll-reveal";
 
 // ─── JSON-LD ──────────────────────────────────────────────────────────────────
@@ -108,6 +107,24 @@ function BaumannMatrix() {
         );
       })}
     </svg>
+  );
+}
+
+function DermalLens() {
+  return (
+    <div className="lp-dermal-lens" aria-hidden="true">
+      <div className="lp-lens-orbit lp-lens-orbit-a" />
+      <div className="lp-lens-orbit lp-lens-orbit-b" />
+      <div className="lp-lens-plane lp-lens-plane-back"><span>OBSERVE</span></div>
+      <div className="lp-lens-plane lp-lens-plane-mid"><span>INTERPRET</span></div>
+      <div className="lp-lens-plane lp-lens-plane-front">
+        <span>FOLLOW THROUGH</span>
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="lp-lens-core">IB</div>
+    </div>
   );
 }
 
@@ -275,52 +292,54 @@ export default function LandingPage() {
               fiecărei consultații.
             </h1>
             <p className="lp-lead">
-              Intake clinic digital, profilare Baumann automată și dosar evolutiv
-              pentru saloane premium și skin studios. De la prima evaluare la planul de tratament — în același flux.
+              Un spațiu de lucru privat pentru intake, interpretare și urmărirea evoluției.
+              De la prima evaluare la debriefing, fiecare decizie păstrează contextul clientului.
             </p>
             <div className="lp-hero-cta">
-              <Link className="lp-btn-primary" href="/client/intake">
-                Încearcă evaluarea demo
+              <Link className="lp-btn-primary" href="/login">
+                Intră în platformă
                 <svg viewBox="0 0 20 20" fill="none" width="16" height="16" aria-hidden="true">
                   <path d="M4 10h12M11 5l5 5-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
               <a className="lp-btn-ghost" href="#kit">
-                Descoperă kit-ul clinic
+                Explorează fluxul
               </a>
             </div>
           </div>
 
-          <div className="lp-hero-visual" aria-hidden="true">
-            <div className="lp-hero-decor" aria-hidden="true">
-              <span className="lp-bubble lp-bubble-1" />
-              <span className="lp-bubble lp-bubble-2" />
-              <span className="lp-bubble lp-bubble-3" />
-              <span className="lp-bubble lp-bubble-4" />
-              <span className="lp-bubble lp-bubble-5" />
-            </div>
-            <div className="lp-matrix-card">
-              <p className="lp-matrix-card-eyebrow">16 tipologii Baumann</p>
+          <div className="lp-hero-visual">
+            <DermalLens />
+            <div className="lp-matrix-wrap">
+              <div className="lp-matrix-labels">
+                <span className="lp-matrix-label-v">OILY → DRY</span>
+                <span className="lp-matrix-label-h">SENSITIVE → RESISTANT</span>
+              </div>
               <BaumannMatrix />
-              <p className="lp-matrix-caption">cartografiate automat prin evaluare clinică</p>
+              <p className="lp-matrix-caption">O hartă de lucru pentru conversația profesionist-client</p>
             </div>
           </div>
         </div>
 
-        <div className="lp-hero-numbers" aria-label="Date cheie">
+        <div className="lp-hero-numbers" aria-label="Capabilități cheie">
           <div className="lp-hero-num">
-            <strong>5</strong>
-            <span>chestionare clinice</span>
+            <strong>01</strong>
+            <span>intake configurabil</span>
           </div>
           <div className="lp-hero-num-div" aria-hidden="true" />
           <div className="lp-hero-num">
-            <strong>16</strong>
-            <span>tipologii Baumann</span>
+            <strong>02</strong>
+            <span>interpretări gestionabile</span>
           </div>
           <div className="lp-hero-num-div" aria-hidden="true" />
           <div className="lp-hero-num">
-            <strong>&lt; 3 min</strong>
-            <span>timp mediu evaluare</span>
+            <strong>03</strong>
+            <span>dosar evolutiv privat</span>
+          </div>
+          <div className="lp-hero-num-div" aria-hidden="true" />
+          <div className="lp-hero-num">
+            <strong>PWA</strong>
+            <span>pregătit pentru mobil</span>
           </div>
         </div>
       </section>
@@ -344,12 +363,12 @@ export default function LandingPage() {
         <div className="lp-kit-header" data-reveal>
           <span className="lp-section-kicker">Kit de consultație</span>
           <h2 id="kit-h2" className="lp-section-title">
-            Cinci instrumente clinice.<br />
-            <em>Un singur flux de intake.</em>
+            Evaluări cu logică proprie.<br />
+            <em>Un singur fir al clientului.</em>
           </h2>
           <p className="lp-section-lead">
-            Fiecare chestionar este validat clinic, codat complet și gata de utilizare.
-            Scorurile sunt interpretate automat — profesionistul primește profilul complet înainte de prima ședință.
+            Administratorii pot construi întrebări, opțiuni, benzi de scorare și interpretări.
+            Echipa salonului vede doar contextul de care are nevoie pentru o consultație mai bună.
           </p>
         </div>
 
@@ -507,20 +526,20 @@ export default function LandingPage() {
             {
               n: "01",
               title: "Clientul completează",
-              body: "Primește un link personalizat înainte de programare. Parcurge chestionarele selectate în 2–5 minute, de pe orice dispozitiv.",
-              detail: "Fără cont. Fără app. Fără fricțiune."
+              body: "Primește un link securizat și completează datele personale și întrebările selectate de salon, de pe orice dispozitiv.",
+              detail: "Un parcurs clar, în ritmul clientului."
             },
             {
               n: "02",
               title: "Sistemul interpretează",
-              body: "Răspunsurile sunt procesate automat. Tipologia Baumann, scorurile clinice și prioritățile de tratament — calculate instant.",
-              detail: "Zero intervenție manuală."
+              body: "Răspunsurile sunt păstrate în dosar, iar regulile configurate atașează scoruri și interpretări potrivite.",
+              detail: "Aceeași logică, aplicată consecvent."
             },
             {
               n: "03",
               title: "Profesionistul acționează",
-              body: "La prima ședință, profilul clientului este deja complet: Baumann, fototip, lifestyle, riscuri clinice și plan de tratament propus.",
-              detail: "Prima ședință devine consultație reală."
+              body: "La debriefing, profesionistul pornește de la un context organizat și poate documenta planul, tratamentele și următoarea etapă.",
+              detail: "Consultația rămâne umană, nu administrativă."
             }
           ].map((step, i) => (
             <article key={step.n} className="lp-flow-step" data-reveal data-delay={i}>
@@ -578,21 +597,26 @@ export default function LandingPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section id="demo" className="lp-cta" aria-labelledby="cta-h2">
+      <section id="access" className="lp-cta" aria-labelledby="cta-h2">
         <div className="lp-cta-inner">
           <div className="lp-cta-text" data-reveal>
-            <span className="lp-section-kicker lp-kicker-light">Demonstrație gratuită</span>
+            <span className="lp-section-kicker lp-kicker-light">Spațiu de lucru privat</span>
             <h2 id="cta-h2" className="lp-section-title lp-title-light">
-              Configurare în<br />
-              <em className="lp-cta-em">mai puțin de 10 minute.</em>
+              Fiecare salon lucrează<br />
+              <em>cu propriul context.</em>
             </h2>
             <p className="lp-lead-light" style={{ marginTop: "1rem", fontSize: "1rem" }}>
-              Fără card de credit. Fără angajament. Primești acces complet la platformă și asistență pentru
-              configurarea inițială.
+              Accesul este bazat pe rol, răspunsurile sunt izolate per salon, iar administratorii pot intra controlat
+              în contextul fiecărei echipe.
             </p>
           </div>
           <div className="lp-cta-form" data-reveal data-delay="1">
-            <DemoForm />
+            <div className="lp-access-card">
+              <span className="lp-access-index">INSIGHT / ACCESS</span>
+              <strong>Continuă în spațiul tău de lucru.</strong>
+              <p>Autentifică-te pentru a vedea evaluările, dosarele și instrumentele disponibile pentru rolul tău.</p>
+              <Link className="lp-btn-primary lp-btn-primary-light" href="/login">Autentificare</Link>
+            </div>
           </div>
         </div>
       </section>
@@ -608,7 +632,7 @@ export default function LandingPage() {
           <nav className="lp-footer-nav" aria-label="Navigare footer">
             <div>
               <strong>Platformă</strong>
-              <a href="/client/intake">Evaluare demo</a>
+              <a href="/login">Acces în platformă</a>
               <a href="/login">Autentificare</a>
             </div>
             <div>

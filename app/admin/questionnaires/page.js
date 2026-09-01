@@ -7,6 +7,8 @@ const KIND_LABELS = {
   "choice-sum": "Sumă de puncte",
   "acne-index": "Index acnee",
   "baumann-dimensions": "Dimensiuni Baumann",
+  "baumann-choice": "Profil Baumann",
+  "professional-observation": "Observație profesională",
   custom: "Personalizat"
 };
 

@@ -643,6 +643,8 @@ export function QuestionnaireEditor({ initialTemplate, isNew }) {
               <option value="choice-sum">Choice Sum — Sumă puncte</option>
               <option value="acne-index">Acne Index — DIA + override chisturi</option>
               <option value="baumann-dimensions">Baumann Dimensions — 4 dimensiuni</option>
+              <option value="baumann-choice">Profil Baumann — răspunsuri pe axe</option>
+              <option value="professional-observation">Observație profesională</option>
             </select>
           </FieldGroup>
           <FieldGroup label="Audiență">

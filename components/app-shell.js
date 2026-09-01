@@ -11,7 +11,7 @@ const ROLE_LABELS = {
 function buildNavigation(currentUser) {
   if (!currentUser) {
     return [
-      { href: "/client/intake", label: "Evaluare demo" },
+      { href: "#kit", label: "Platforma" },
       { href: "/login", label: "Autentificare", accent: true }
     ];
   }
@@ -46,10 +46,10 @@ export function AppShell({ children, currentUser }) {
   const roleLabel = currentUser ? (ROLE_LABELS[currentUser.role] || currentUser.role) : null;
 
   return (
-    <div className="site-shell">
+    <div className={`site-shell ${currentUser ? "is-authenticated" : "is-public"}`}>
       <header className="topbar">
         <Link className="brand-mark" href="/">
-          <span className="brand-mark-symbol" aria-hidden="true">✦</span>
+          <span className="brand-mark-symbol" aria-hidden="true">IB</span>
           <span className="brand-mark-name">Insight Beauty</span>
         </Link>
 

@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { AccessDenied } from "../../../../../../components/access-denied";
 import { ProfessionalIntake } from "../../../../../../components/professional-intake";
 import { canAccessProfessional, isDatabaseConfigured, requireUser } from "../../../../../../lib/auth";
-import { listPublicEvaluableDefinitions } from "../../../../../../lib/questionnaire-db";
+import { listActiveEvaluableDefinitions } from "../../../../../../lib/questionnaire-db";
 import {
   getClientById,
   getProfessionalById,
@@ -29,18 +29,10 @@ export default async function ProfessionalIntakePage({ params }) {
     return <AccessDenied body="Accesul la evaluare este rezervat profesionistului autentificat." />;
   }
 
-  const [clients, questionnaires] = await Promise.all([
+  const [clients, allQuestionnaires] = await Promise.all([
     listClientsForSalon(salon._id),
-    listPublicEvaluableDefinitions().then((qs) =>
-      qs.filter((q) => q.questions?.length > 0 || (q.dimensions && Object.keys(q.dimensions).length > 0))
-    )
+    listActiveEvaluableDefinitions()
   ]);
-
-  const allQuestionnaires = await Promise.all([
-    listPublicEvaluableDefinitions()
-  ]).then(([list]) =>
-    list.filter((q) => q.questions?.length > 0 || (q.dimensions && Object.keys(q.dimensions).length > 0))
-  );
 
   return (
     <div className="stack page-stack">

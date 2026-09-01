@@ -151,6 +151,8 @@ function StepClient({ clients, onSelect }) {
 
 /* ─── Step 2: Questionnaire selection ───────────────────────────── */
 function StepQuestionnaire({ questionnaires, selectedClient, onSelect, onBack }) {
+  const groups = [...new Set(questionnaires.map((questionnaire) => questionnaire.group || "Chestionare"))];
+
   return (
     <div className="intake-step">
       <div className="intake-step-header">
@@ -159,18 +161,23 @@ function StepQuestionnaire({ questionnaires, selectedClient, onSelect, onBack })
           Client: <strong>{selectedClient?.firstName} {selectedClient?.lastName}</strong>
         </p>
       </div>
-      <div className="questionnaire-select-grid">
-        {questionnaires.map((q) => (
-          <button key={q.slug} className="q-select-card" type="button" onClick={() => onSelect(q)}>
-            <div className="q-select-meta">
-              <span className="tag">{q.kind}</span>
-              <span className="tag tag-soft">{q.audience}</span>
-            </div>
-            <h3>{q.title}</h3>
-            <p className="helper-copy">{q.description || `${q.questions?.length || 0} întrebări`}</p>
-          </button>
-        ))}
-      </div>
+      {groups.map((group) => (
+        <section key={group} className="questionnaire-group">
+          <span className="field-label">{group}</span>
+          <div className="questionnaire-select-grid">
+            {questionnaires.filter((questionnaire) => (questionnaire.group || "Chestionare") === group).map((q) => (
+              <button key={q.slug} className="q-select-card" type="button" onClick={() => onSelect(q)}>
+                <div className="q-select-meta">
+                  <span className="tag">{q.kind === "professional-observation" ? "observație" : q.kind}</span>
+                  <span className="tag tag-soft">{q.audience}</span>
+                </div>
+                <h3>{q.title}</h3>
+                <p className="helper-copy">{q.description || `${q.questions?.length || 0} întrebări`}</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
       <button className="text-link" onClick={onBack} type="button">← Schimbă clientul</button>
     </div>
   );
@@ -231,21 +238,25 @@ function StepAnswers({ questionnaire, selectedClient, onSubmit, onBack, isPendin
           questions.map((q) => (
             <div key={q.id} className="field-group intake-question">
               <label className="field-label">{q.label}</label>
-              <div className="intake-options">
-                {q.options.map((opt) => (
-                  <label key={opt.value} className={`intake-option${answers[q.id] === opt.value ? " selected" : ""}`}>
-                    <input
-                      type="radio"
-                      name={q.id}
-                      value={opt.value}
-                      checked={answers[q.id] === opt.value}
-                      onChange={() => setAnswer(q.id, opt.value)}
-                    />
-                    <span>{opt.label}</span>
-                    <span className="option-pts-badge">{opt.points}p</span>
-                  </label>
-                ))}
-              </div>
+              {q.inputType === "textarea" ? (
+                <textarea className="field-input" rows={4} value={answers[q.id] || ""} onChange={(e) => setAnswer(q.id, e.target.value)} placeholder="Consemnează observațiile profesionale" />
+              ) : (
+                <div className="intake-options">
+                  {q.options.map((opt) => (
+                    <label key={opt.value} className={`intake-option${answers[q.id] === opt.value ? " selected" : ""}`}>
+                      <input
+                        type="radio"
+                        name={q.id}
+                        value={opt.value}
+                        checked={answers[q.id] === opt.value}
+                        onChange={() => setAnswer(q.id, opt.value)}
+                      />
+                      <span>{opt.label}</span>
+                      <span className="option-pts-badge">{opt.points}p</span>
+                    </label>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         )}
