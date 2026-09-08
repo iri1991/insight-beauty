@@ -10,7 +10,7 @@ export default async function Home() {
   return <main className="landing">
     <div className="landing-grain" />
     <nav className="landing-nav" aria-label="Navigație principală">
-      <Link className="landing-brand" href="/"><span>IB</span>Insight Beauty</Link>
+      <Link className="landing-brand" href="/"><span>✦</span>Insight Beauty</Link>
       <div className="landing-links"><a href="#platforma">Platforma</a><a href="#parcurs">Parcursul</a><a href="#pentru-echipe">Pentru echipe</a></div>
       <Link className="nav-login" href={workspace}>{account ? "Deschide spațiul meu" : "Autentificare"}<Arrow /></Link>
     </nav>

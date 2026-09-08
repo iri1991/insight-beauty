@@ -2,6 +2,7 @@ import "./globals.css";
 import "./soft-botanical.css";
 import "./professional-portal.css";
 import "./assessment-sequence.css";
+import "./unified-experience.css";
 import { PwaFoundation } from "../components/pwa-foundation";
 
 export const metadata = { title: "Insight Beauty", description: "Dosar de îngrijire personalizat" };

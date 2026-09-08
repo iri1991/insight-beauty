@@ -9,13 +9,9 @@ const navigation = {
 };
 
 export function AppShell({ account, children }) {
-  return <div className="app-frame">
-    <aside className="sidebar">
-      <Link className="brand" href="/"><span className="brand-mark">I</span><span>Insight<br />Beauty</span></Link>
-      <p className="sidebar-label">Spațiu {account.role === "professional" ? "profesionist" : account.role === "client" ? "client" : account.role}</p>
-      <nav>{navigation[account.role].map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}</nav>
-      <div className="account-block"><strong>{account.name}</strong><span>{account.email}</span><LogoutButton /></div>
-    </aside>
-    <main className="workspace">{children}</main>
+  const roleLabel = { client: "Spațiu client", professional: "Spațiu profesionist", salon: "Spațiu salon", admin: "Control platformă" }[account.role];
+  return <div className="unified-app">
+    <header className="unified-header"><Link className="unified-brand" href="/"><span>✦</span>Insight<i>Beauty</i></Link><nav aria-label="Navigație aplicație">{navigation[account.role].map(([label, href]) => <Link key={href} href={href}>{label}</Link>)}</nav><div className="unified-account"><span>{roleLabel}</span><strong>{account.name}</strong><LogoutButton /></div></header>
+    <main className="unified-workspace">{children}</main>
   </div>;
 }
