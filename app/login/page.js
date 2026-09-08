@@ -1,39 +1,5 @@
+import { redirect } from "next/navigation";
 import { LoginForm } from "../../components/login-form";
-import { isDatabaseConfigured } from "../../lib/auth";
+import { currentAccount } from "../../lib/auth";
 
-export default async function LoginPage({ searchParams }) {
-  const params = await searchParams;
-  const returnTo = params?.returnTo || null;
-
-  return (
-    <div className="auth-page">
-      <div className="auth-shell">
-        <div className="auth-brand">
-          <span className="auth-logo-mark" aria-hidden="true">✦</span>
-          <span className="auth-brand-name">Insight Beauty</span>
-        </div>
-
-        <header className="auth-header">
-          <h1>Bun venit înapoi</h1>
-          <p className="auth-lead">
-            {returnTo
-              ? "Autentifică-te pentru a continua evaluarea clientului."
-              : "Intră în contul tău pentru a accesa platforma."}
-          </p>
-        </header>
-
-        {isDatabaseConfigured() ? (
-          <LoginForm returnTo={returnTo} />
-        ) : (
-          <div className="auth-notice">
-            <p>Platforma nu este disponibilă momentan. Contactează administratorul pentru asistență.</p>
-          </div>
-        )}
-
-        <p className="auth-footer-note">
-          Nu ai cont? Contactează salonul sau profesionistul tău — accesul îți va fi creat direct.
-        </p>
-      </div>
-    </div>
-  );
-}
+export default async function LoginPage() { if (await currentAccount()) redirect("/"); return <main className="auth-page"><div className="auth-intro"><p className="eyebrow">Insight Beauty</p><h2>O viziune clară asupra pielii, de la prima conversație.</h2><p>Dosare în timp, evaluări ordonate și continuitate între client, profesionist și salon.</p></div><LoginForm /></main>; }

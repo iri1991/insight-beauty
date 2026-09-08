@@ -1,28 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
-
 export function LogoutButton() {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-
-  function handleLogout() {
-    startTransition(() => {
-      void (async () => {
-        await fetch("/api/auth/logout", {
-          method: "POST"
-        });
-        router.push("/login");
-        router.refresh();
-      })();
-    });
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.assign("/login");
   }
-
-  return (
-    <button className="button secondary logout-button" type="button" disabled={isPending} onClick={handleLogout}>
-      {isPending ? "Iesire..." : "Logout"}
-    </button>
-  );
+  return <button className="quiet-button" onClick={logout}>Ieși din cont</button>;
 }
-

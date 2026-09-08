@@ -1,80 +1,22 @@
 import { NextResponse } from "next/server";
-import { canAccessAdmin, getCurrentUser, isDatabaseConfigured } from "../../../../lib/auth";
-import { connectMongo } from "../../../../lib/mongodb";
-import { getModels } from "../../../../lib/mongoose-models";
-
-function slugify(value) {
-  return value
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-export async function GET() {
-  if (!isDatabaseConfigured()) {
-    return NextResponse.json({ error: "Database neconfigurat." }, { status: 503 });
-  }
-
-  const user = await getCurrentUser();
-
-  if (!canAccessAdmin(user)) {
-    return NextResponse.json({ error: "Acces refuzat." }, { status: 403 });
-  }
-
-  await connectMongo();
-  const { Salon } = getModels();
-  const salons = await Salon.find().sort({ name: 1 }).lean().exec();
-
-  return NextResponse.json({ salons: salons.map((s) => ({ ...s, _id: String(s._id) })) });
-}
+import { requireRole } from "../../../../lib/auth";
+import { connectDb } from "../../../../lib/db";
+import { Account, Salon } from "../../../../lib/models";
+import { hashPassword } from "../../../../lib/passwords";
 
 export async function POST(request) {
-  if (!isDatabaseConfigured()) {
-    return NextResponse.json({ error: "Database neconfigurat." }, { status: 503 });
+  const admin = await requireRole("admin");
+  if (!admin) return NextResponse.json({ error: "Acces neautorizat." }, { status: 403 });
+  const { name, city, ownerName, ownerEmail, password } = await request.json();
+  if (![name, city, ownerName, ownerEmail, password].every((value) => value?.trim())) {
+    return NextResponse.json({ error: "Completează toate datele salonului și ale administratorului local." }, { status: 400 });
   }
-
-  const user = await getCurrentUser();
-
-  if (!canAccessAdmin(user)) {
-    return NextResponse.json({ error: "Acces refuzat." }, { status: 403 });
-  }
-
-  const payload = await request.json();
-  const { name, city, theme } = payload;
-
-  if (!name?.trim()) {
-    return NextResponse.json({ error: "Numele salonului este obligatoriu." }, { status: 422 });
-  }
-
-  await connectMongo();
-  const { Salon } = getModels();
-
-  const baseSlug = slugify(name.trim());
-  let slug = baseSlug;
-  let attempt = 0;
-
-  while (await Salon.exists({ slug })) {
-    attempt++;
-    slug = `${baseSlug}-${attempt}`;
-  }
-
-  const salon = await Salon.create({
-    slug,
-    name: name.trim(),
-    city: city?.trim() || "",
-    theme: theme?.trim() || "classic",
-    confidentialityScope: "tenant-isolated",
-    adminIds: [],
-    professionalIds: []
-  });
-
-  return NextResponse.json(
-    {
-      ok: true,
-      salon: { ...salon.toObject(), _id: String(salon._id) }
-    },
-    { status: 201 }
-  );
+  if (password.length < 8) return NextResponse.json({ error: "Parola trebuie să aibă minimum 8 caractere." }, { status: 400 });
+  await connectDb();
+  if (await Account.exists({ email: ownerEmail.trim().toLowerCase() })) return NextResponse.json({ error: "Emailul este deja utilizat." }, { status: 409 });
+  const owner = await Account.create({ email: ownerEmail.trim().toLowerCase(), passwordHash: hashPassword(password), name: ownerName.trim(), role: "salon" });
+  const salon = await Salon.create({ name: name.trim(), city: city.trim(), ownerId: String(owner._id) });
+  owner.salonId = String(salon._id);
+  await owner.save();
+  return NextResponse.json({ salon: { id: String(salon._id), name: salon.name } }, { status: 201 });
 }
