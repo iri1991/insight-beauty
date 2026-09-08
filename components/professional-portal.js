@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { LogoutButton } from "./logout-button";
 
 function Mark() { return <span className="pro-mark" aria-hidden="true">✦</span>; }
 
 export function ProHeader({ account, salonName }) {
-  return <header className="pro-header"><Link href="/professional" className="pro-brand"><Mark /> <span>Insight<span>Beauty</span></span></Link><div className="pro-account"><span>{salonName || "Portofoliu individual"}</span><strong>{account.name}</strong></div></header>;
+  return <header className="pro-header"><Link href="/professional" className="pro-brand"><Mark /> <span>Insight<span>Beauty</span></span></Link><div className="pro-account"><span>{salonName || "Portofoliu individual"}</span><strong>{account.name}</strong><LogoutButton /></div></header>;
 }
 
 function Phenotype({ code }) {
