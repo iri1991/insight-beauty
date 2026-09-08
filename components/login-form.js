@@ -17,9 +17,9 @@ export function LoginForm() {
     window.location.assign(destinations[data.role]);
   }
   return <form className="auth-card" onSubmit={submit}>
-    <p className="eyebrow">Acces securizat</p><h1>Îngrijire personalizată, organizată.</h1><p>Intră în spațiul tău Insight Beauty.</p>
-    <label>Email<input name="email" type="email" autoComplete="email" required /></label>
-    <label>Parolă<input name="password" type="password" autoComplete="current-password" required /></label>
+    <p className="eyebrow">Autentificare</p><h2>Bun venit înapoi.</h2><p>Introdu datele de acces pentru a continua.</p>
+    <label>Adresa de email<input name="email" type="email" autoComplete="email" placeholder="nume@salon.ro" required /></label>
+    <label>Parola<input name="password" type="password" autoComplete="current-password" required /></label>
     {error && <p className="form-error">{error}</p>}
     <button className="primary-button" disabled={busy}>{busy ? "Se verifică..." : "Intră în cont"}</button>
   </form>;
