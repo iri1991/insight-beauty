@@ -1,0 +1,19 @@
+/* Calm, feminine palette applied after the base interface styles. */
+.landing { --charcoal: #5c4946; --cream: #fbf6f3; --clay: #bb7d80; --dune: #e8c6b4; --moss: #e3e8d9; --soft-ink: #7b6965; }
+.landing-nav { border-color: rgba(92,73,70,.14); }
+.landing-brand, .login-brand { font-family: "Cormorant Garamond", serif; font-size: 24px; }
+.landing-links { color: #8e7c77; }
+.landing h1, .landing h2, .login-page h1 { font-family: "Cormorant Garamond", serif; font-weight: 600; }
+.landing h1 em { font-weight: 500; }
+.landing-cta, .closing-button { background: #806864; color: #fffaf8; border-radius: 999px; }
+.skin-card { background: #826d69; color: #fffaf8; box-shadow: 20px 25px 0 rgba(231,229,214,.94); transform: rotate(2deg); }
+.skin-card-top, .skin-card-bottom { color: #f3ded6; }
+.skin-code { color: #ffe1d1; font-family: "Cormorant Garamond", serif; font-weight: 600; }
+.skin-card > p { color: #fff4ef; }
+.skin-bars { border-color: rgba(255,255,255,.34); }
+.skin-bars i { background: #f2c7b6; }.skin-bars i:nth-child(2) { background: #e2e6d5; }.skin-bars i:nth-child(3) { background: #dc9992; }
+.skin-card-bottom strong { color: #f5dfb9; }.art-arch { border-color: #ae918a; }.art-orbit { border-color: rgba(121,98,93,.25); }.sun-disc { opacity: .8; }.hero-note { color: #9a847e; }
+.journey-track, .journey-track article, .journey-track article:first-child { border-color: rgba(92,73,70,.2); }
+.roles-section { background: #745e5a; }.roles-section .section-number { color: #ead6ce; }.roles-section .landing-kicker, .role-list p { color: #f3cab8; }.roles-copy > p:last-child, .role-list span { color: #f2dfd8; }.role-list, .role-list article { border-color: rgba(255,250,248,.3); }
+.landing-closing { background: #c88d8d; }.landing-closing .landing-kicker { color: #fff0e7; }.closing-button { background: #fff9f5; color: #6c514d; }.closing-button:hover { background: #765f5b; color: #fff9f5; }
+.login-page { --login-ink: #5c4946; --login-paper: #fbf6f3; --login-rose: #bb7d80; }.login-page:before { border-color: rgba(133,104,99,.17); box-shadow: 0 0 0 55px rgba(200,141,141,.05), 0 0 0 110px rgba(200,141,141,.035); }.login-page:after { background: #ead9c7; }.login-page .auth-card { box-shadow: 18px 20px 0 #ead5cb; border-radius: 14px; }.login-page .auth-card h2 { color: var(--login-ink); font-family: "Cormorant Garamond", serif; font-size: 48px; }.login-page .primary-button { background: #806864; border-radius: 999px; }.login-page .primary-button:hover { background: var(--login-rose); }.login-orbit { border-color: rgba(133,104,99,.3); }.login-story > p:not(.landing-kicker), .login-orbit span, .login-footnote { color: #8d7772; }
