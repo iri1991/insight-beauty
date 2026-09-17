@@ -12,7 +12,7 @@ export async function POST(request) {
   if (!clientId || !date) return NextResponse.json({ error: "Clientul și data vizitei sunt obligatorii." }, { status: 400 });
   await connectDb();
   const professional = await Professional.findById(account.professionalId).lean();
-  const client = await Client.findOne({ _id: clientId, professionalId: account.professionalId, salonId: professional?.salonId }).lean();
+  const client = await Client.findOne({ _id: clientId, professionalId: account.professionalId, salonId: professional?.salonId, deletedAt: null }).lean();
   if (!client || !professional) return NextResponse.json({ error: "Client indisponibil în portofoliul tău." }, { status: 404 });
   const visit = await Visit.create({ clientId, salonId: professional.salonId, professionalId: account.professionalId, date: new Date(date), procedures: splitValues(procedures), treatments: splitValues(treatments), notes: notes?.trim(), nextStep: nextStep?.trim() });
   return NextResponse.json({ visit: { id: String(visit._id) } }, { status: 201 });

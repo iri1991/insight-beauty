@@ -4,6 +4,9 @@ import "./professional-portal.css";
 import "./assessment-sequence.css";
 import "./unified-experience.css";
 import "./access-controls.css";
+import "./assessment-runner.css";
+import "./soft-delete.css";
+import "./client-profile-fields.css";
 import { PwaFoundation } from "../components/pwa-foundation";
 
 export const metadata = { title: "Insight Beauty", description: "Dosar de îngrijire personalizat" };

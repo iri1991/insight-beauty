@@ -3,6 +3,8 @@ import { connectDb } from "../../../../lib/db";
 import { Account, Client } from "../../../../lib/models";
 import { hashPassword } from "../../../../lib/passwords";
 import { getBaumannType } from "../../../../lib/questionnaires";
+import { onboardingConfirmationEmail, sendEmail } from "../../../../lib/email";
+import { Professional, Salon } from "../../../../lib/models";
 
 export async function POST(request, { params }) {
   const { token } = await params;
@@ -23,7 +25,13 @@ export async function POST(request, { params }) {
   client.onboardingToken = undefined;
   client.onboardingStatus = "completed";
   await client.save();
+  const [professional, salon] = await Promise.all([
+    Professional.findById(client.professionalId).lean(),
+    Salon.findById(client.salonId).lean()
+  ]);
+  const delivery = await sendEmail({ to: client.email, ...onboardingConfirmationEmail({ clientName: client.name, baumannType: type, professionalName: professional?.name || "Profesionistul tău", salonName: salon?.name || "salonul tău" }) });
   const response = NextResponse.json({ result: type });
+  response.headers.set("X-Insight-Email-Sent", String(delivery.sent));
   response.cookies.set("ib_session", String(account._id), { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 60 * 60 * 24 * 14 });
   return response;
 }
